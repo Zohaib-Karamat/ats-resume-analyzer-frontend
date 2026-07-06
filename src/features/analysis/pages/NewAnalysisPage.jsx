@@ -1,0 +1,80 @@
+import { useState } from "react";
+import { ResumeSelect } from "../components/ResumeSelect";
+import { JobDescriptionSelect } from "../components/JobDescriptionSelect";
+import { AnalysisLoadingState } from "../components/AnalysisLoadingState";
+import { useCreateAnalysis } from "../hooks/useCreateAnalysis";
+import { Button } from "../../../components/ui/Button";
+import { Zap } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
+
+export function NewAnalysisPage() {
+  const [selectedResumeId, setSelectedResumeId] = useState(null);
+  const [selectedJdId, setSelectedJdId] = useState(null);
+  
+  const { mutate: createAnalysis, isPending } = useCreateAnalysis();
+
+  const handleAnalyze = () => {
+    if (selectedResumeId && selectedJdId) {
+      createAnalysis({ resumeId: selectedResumeId, jdId: selectedJdId });
+    }
+  };
+
+  if (isPending) {
+    return (
+      <div className="mx-auto max-w-4xl py-12">
+        <AnalysisLoadingState />
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-8 h-full flex flex-col">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+          New Analysis
+        </h1>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+          Select a resume and a job description to see how well they match.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card className="flex flex-col h-[400px]">
+          <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
+            <CardTitle className="text-lg">1. Choose Resume</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 flex-1 overflow-hidden">
+            <ResumeSelect 
+              selectedId={selectedResumeId} 
+              onSelect={setSelectedResumeId} 
+            />
+          </CardContent>
+        </Card>
+
+        <Card className="flex flex-col h-[400px]">
+          <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
+            <CardTitle className="text-lg">2. Choose Job Description</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 flex-1 overflow-hidden">
+            <JobDescriptionSelect 
+              selectedId={selectedJdId} 
+              onSelect={setSelectedJdId} 
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex justify-end pt-4">
+        <Button 
+          size="lg" 
+          onClick={handleAnalyze}
+          disabled={!selectedResumeId || !selectedJdId}
+          className="w-full sm:w-auto"
+        >
+          <Zap className="mr-2 h-5 w-5" />
+          Analyze Match
+        </Button>
+      </div>
+    </div>
+  );
+}
