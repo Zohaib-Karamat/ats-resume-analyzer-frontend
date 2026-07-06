@@ -1,0 +1,191 @@
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { User, Lock, Mail } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../../components/ui/Card";
+import { Input } from "../../../components/ui/Input";
+import { Button } from "../../../components/ui/Button";
+import { useAuth } from "../../../hooks/useAuth";
+import { profileUpdateSchema, passwordUpdateSchema } from "../schemas/profileSchemas";
+
+export function ProfilePage() {
+  const { user } = useAuth();
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  const profileForm = useForm({
+    resolver: zodResolver(profileUpdateSchema),
+    defaultValues: { name: "", email: "" },
+  });
+
+  const passwordForm = useForm({
+    resolver: zodResolver(passwordUpdateSchema),
+    defaultValues: { currentPassword: "", newPassword: "", confirmPassword: "" },
+  });
+
+  useEffect(() => {
+    if (user) {
+      profileForm.reset({ name: user.name || "", email: user.email || "" });
+    }
+  }, [user, profileForm]);
+
+  const onProfileSubmit = async (data) => {
+    setIsUpdatingProfile(true);
+    // Mock API call
+    setTimeout(() => {
+      setIsUpdatingProfile(false);
+      toast.success("Profile updated successfully!");
+    }, 1000);
+  };
+
+  const onPasswordSubmit = async (data) => {
+    setIsUpdatingPassword(true);
+    // Mock API call
+    setTimeout(() => {
+      setIsUpdatingPassword(false);
+      toast.success("Password changed successfully!");
+      passwordForm.reset();
+    }, 1000);
+  };
+
+  return (
+    <div className="space-y-8 max-w-4xl mx-auto h-full flex flex-col pb-12">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+          Account Settings
+        </h1>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+          Manage your personal information and security preferences.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        {/* Profile Info Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Personal Information</CardTitle>
+            <CardDescription>Update your name and email address.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-zinc-300">Full Name</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <User className="h-4 w-4 text-zinc-400" />
+                  </div>
+                  <Input 
+                    {...profileForm.register("name")} 
+                    className="pl-10" 
+                    placeholder="John Doe" 
+                  />
+                </div>
+                {profileForm.formState.errors.name && (
+                  <p className="text-sm text-rose-500">{profileForm.formState.errors.name.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-zinc-300">Email Address</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Mail className="h-4 w-4 text-zinc-400" />
+                  </div>
+                  <Input 
+                    {...profileForm.register("email")} 
+                    type="email" 
+                    className="pl-10" 
+                    placeholder="john@example.com" 
+                  />
+                </div>
+                {profileForm.formState.errors.email && (
+                  <p className="text-sm text-rose-500">{profileForm.formState.errors.email.message}</p>
+                )}
+              </div>
+
+              <div className="pt-2">
+                <Button type="submit" isLoading={isUpdatingProfile}>
+                  Save Changes
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Password Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Security</CardTitle>
+            <CardDescription>Ensure your account is using a long, random password to stay secure.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-zinc-300">Current Password</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Lock className="h-4 w-4 text-zinc-400" />
+                  </div>
+                  <Input 
+                    {...passwordForm.register("currentPassword")} 
+                    type="password" 
+                    className="pl-10" 
+                    placeholder="••••••••" 
+                  />
+                </div>
+                {passwordForm.formState.errors.currentPassword && (
+                  <p className="text-sm text-rose-500">{passwordForm.formState.errors.currentPassword.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-zinc-300">New Password</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Lock className="h-4 w-4 text-zinc-400" />
+                  </div>
+                  <Input 
+                    {...passwordForm.register("newPassword")} 
+                    type="password" 
+                    className="pl-10" 
+                    placeholder="••••••••" 
+                  />
+                </div>
+                {passwordForm.formState.errors.newPassword && (
+                  <p className="text-sm text-rose-500">{passwordForm.formState.errors.newPassword.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium dark:text-zinc-300">Confirm New Password</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <Lock className="h-4 w-4 text-zinc-400" />
+                  </div>
+                  <Input 
+                    {...passwordForm.register("confirmPassword")} 
+                    type="password" 
+                    className="pl-10" 
+                    placeholder="••••••••" 
+                  />
+                </div>
+                {passwordForm.formState.errors.confirmPassword && (
+                  <p className="text-sm text-rose-500">{passwordForm.formState.errors.confirmPassword.message}</p>
+                )}
+              </div>
+
+              <div className="pt-2">
+                <Button type="submit" variant="secondary" isLoading={isUpdatingPassword}>
+                  Update Password
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+      </div>
+    </div>
+  );
+}
