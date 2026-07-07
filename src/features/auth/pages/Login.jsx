@@ -1,23 +1,29 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../schemas/authSchemas";
-import { authApi } from "../api/authApi";
-import { useAuth } from "../../../hooks/useAuth";
+import { useLogin } from "../hooks/useLogin";
+import { applyServerFieldErrors } from "../../../lib/errorUtils";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/ui/Card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/Card";
 import toast from "react-hot-toast";
 
 export function Login() {
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const loginMutation = useLogin();
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -25,24 +31,13 @@ export function Login() {
 
   const onSubmit = async (data) => {
     try {
-      setIsLoading(true);
-      // Mocking the API call for now since backend might not be ready
-      // const response = await authApi.login(data);
-      // setAuth(response.user, response.token);
-      
-      // Mock success:
-      setTimeout(() => {
-        setAuth({ name: "Demo User", email: data.email }, "mock-jwt-token-123");
-        toast.success("Successfully logged in!");
-        navigate("/dashboard");
-      }, 1000);
-      
+      await loginMutation.mutateAsync(data);
+      toast.success("Successfully logged in!");
+      navigate("/dashboard", { replace: true });
     } catch (error) {
-      // Error handled by interceptor or custom logic here
-      console.error("Login error", error);
-    } finally {
-      // setIsLoading(false) usually called here, but mocked above requires it in timeout
-      if(false) setIsLoading(false); 
+      // A generic toast is already shown by the axios interceptor; if the
+      // backend flagged specific fields, surface those inline too.
+      applyServerFieldErrors(error, setError);
     }
   };
 
@@ -81,17 +76,18 @@ export function Login() {
                 Forgot password?
               </Link>
             </div>
-            <Input
-              type="password"
-              {...register("password")}
-            />
+            <Input type="password" {...register("password")} />
             {errors.password && (
               <p className="text-sm text-rose-500">{errors.password.message}</p>
             )}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button className="w-full" type="submit" isLoading={isLoading}>
+          <Button
+            className="w-full"
+            type="submit"
+            isLoading={loginMutation.isPending}
+          >
             Sign in
           </Button>
           <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
