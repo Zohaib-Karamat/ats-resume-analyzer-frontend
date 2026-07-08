@@ -16,6 +16,10 @@ export const authApi = {
     const response = await api.get("/auth/me");
     return response.data.data;
   },
+  updateMe: async (payload) => {
+    const response = await api.patch("/auth/me", payload);
+    return response.data.data;
+  },
   logout: async () => {
     const response = await api.post("/auth/logout");
     return response.data.data;

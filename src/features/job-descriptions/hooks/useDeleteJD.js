@@ -7,13 +7,11 @@ export function useDeleteJD() {
 
   return useMutation({
     mutationFn: (id) => jobDescriptionApi.delete(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       toast.success("Job description deleted");
-      queryClient.invalidateQueries(["job-descriptions"]);
-      queryClient.invalidateQueries(["dashboard", "summary"]);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to delete job description");
+      queryClient.invalidateQueries({ queryKey: ["job-descriptions"] });
+      queryClient.invalidateQueries({ queryKey: ["job-description", id] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
     },
   });
 }

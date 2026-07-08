@@ -9,11 +9,8 @@ export function useCreateJD() {
     mutationFn: (data) => jobDescriptionApi.create(data),
     onSuccess: () => {
       toast.success("Job description saved");
-      queryClient.invalidateQueries(["job-descriptions"]);
-      queryClient.invalidateQueries(["dashboard", "summary"]);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to save job description");
+      queryClient.invalidateQueries({ queryKey: ["job-descriptions"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
     },
   });
 }

@@ -17,12 +17,11 @@ export function useUploadResume() {
     },
     onSuccess: () => {
       toast.success("Resume uploaded successfully");
-      queryClient.invalidateQueries(["resumes"]);
-      queryClient.invalidateQueries(["dashboard", "summary"]); // Invalidate dashboard stats too
+      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
       setProgress(0);
     },
-    onError: (error) => {
-      toast.error(error.message || "Failed to upload resume");
+    onError: () => {
       setProgress(0);
     },
   });

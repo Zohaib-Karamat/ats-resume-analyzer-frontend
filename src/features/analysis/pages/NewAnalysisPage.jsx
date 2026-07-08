@@ -34,7 +34,7 @@ export function NewAnalysisPage() {
           New Analysis
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          Select a resume and a job description to see how well they match.
+          Select a resume and job description, then run the AI match analysis.
         </p>
       </div>
 
@@ -69,10 +69,11 @@ export function NewAnalysisPage() {
           size="lg" 
           onClick={handleAnalyze}
           disabled={!selectedResumeId || !selectedJdId}
+          isLoading={isPending}
           className="w-full sm:w-auto"
         >
           <Zap className="mr-2 h-5 w-5" />
-          Analyze Match
+          Run AI Analysis
         </Button>
       </div>
     </div>

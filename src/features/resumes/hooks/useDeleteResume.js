@@ -7,13 +7,11 @@ export function useDeleteResume() {
 
   return useMutation({
     mutationFn: (id) => resumeApi.deleteResume(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       toast.success("Resume deleted");
-      queryClient.invalidateQueries(["resumes"]);
-      queryClient.invalidateQueries(["dashboard", "summary"]);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to delete resume");
+      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ["resume", id] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "summary"] });
     },
   });
 }

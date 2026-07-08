@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ChevronDown, ChevronUp, Clock, Target } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Clock, Target, Trash2 } from "lucide-react";
 import { useAnalysisHistory } from "../hooks/useAnalysisHistory";
+import { useDeleteAnalysis } from "../hooks/useDeleteAnalysis";
 import { Input } from "../../../components/ui/Input";
 import { Badge } from "../../../components/ui/Badge";
 import { Skeleton } from "../../../components/ui/Skeleton";
 import { Card, CardContent } from "../../../components/ui/Card";
+import { IconButton } from "../../../components/ui/IconButton";
+import { QueryErrorState } from "../../../components/ui/States";
 
 function getScoreColor(score) {
   if (score >= 80) return "success";
@@ -13,8 +16,14 @@ function getScoreColor(score) {
   return "danger";
 }
 
+function SortIcon({ active, order }) {
+  if (!active) return <div className="w-4 h-4" />;
+  return order === "desc" ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />;
+}
+
 export function HistoryPage() {
-  const { data: history, isLoading } = useAnalysisHistory();
+  const { data: history, isLoading, isError, refetch } = useAnalysisHistory();
+  const { mutate: deleteAnalysis, isPending: isDeleting } = useDeleteAnalysis();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("date"); // 'date' | 'score'
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc'
@@ -44,9 +53,9 @@ export function HistoryPage() {
       return sortOrder === "asc" ? comparison : -comparison;
     });
 
-  const SortIcon = ({ field }) => {
-    if (sortBy !== field) return <div className="w-4 h-4" />;
-    return sortOrder === "desc" ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />;
+  const handleDelete = (event, id) => {
+    event.stopPropagation();
+    deleteAnalysis(id);
   };
 
   return (
@@ -75,7 +84,12 @@ export function HistoryPage() {
         </div>
       </div>
 
-      {isLoading ? (
+      {isError ? (
+        <QueryErrorState
+          onRetry={refetch}
+          message="We could not load your analysis history from the server."
+        />
+      ) : isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20 w-full rounded-xl" />)}
         </div>
@@ -100,7 +114,7 @@ export function HistoryPage() {
                     <div className="flex items-center space-x-1">
                       <Target className="w-4 h-4 mr-1" />
                       <span>Score</span>
-                      <SortIcon field="score" />
+                      <SortIcon active={sortBy === "score"} order={sortOrder} />
                     </div>
                   </th>
                   <th 
@@ -111,8 +125,11 @@ export function HistoryPage() {
                     <div className="flex items-center space-x-1">
                       <Clock className="w-4 h-4 mr-1" />
                       <span>Date</span>
-                      <SortIcon field="date" />
+                      <SortIcon active={sortBy === "date"} order={sortOrder} />
                     </div>
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider dark:text-zinc-400">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -135,6 +152,19 @@ export function HistoryPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">
                       {new Date(item.createdAt).toLocaleDateString()}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                      <IconButton
+                        variant="ghost"
+                        size="sm"
+                        title="Delete analysis"
+                        aria-label={`Delete analysis ${item.id}`}
+                        className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-500 dark:hover:bg-rose-950/50"
+                        disabled={isDeleting}
+                        onClick={(event) => handleDelete(event, item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </IconButton>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -149,13 +179,26 @@ export function HistoryPage() {
                 className="cursor-pointer transition-colors hover:border-indigo-300 dark:hover:border-indigo-700"
                 onClick={() => navigate(`/analysis/${item.id}`)}
               >
-                <CardContent className="p-4 flex justify-between items-center">
+                <CardContent className="p-4 flex justify-between items-center gap-3">
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">{item.resumeName}</p>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">{item.jdTitle}</p>
                     <p className="text-xs text-zinc-400 dark:text-zinc-500">{new Date(item.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <Badge variant={getScoreColor(item.score)} className="shrink-0">{item.score}%</Badge>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Badge variant={getScoreColor(item.score)}>{item.score}%</Badge>
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      title="Delete analysis"
+                      aria-label={`Delete analysis ${item.id}`}
+                      className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-500 dark:hover:bg-rose-950/50"
+                      disabled={isDeleting}
+                      onClick={(event) => handleDelete(event, item.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </IconButton>
+                  </div>
                 </CardContent>
               </Card>
             ))}

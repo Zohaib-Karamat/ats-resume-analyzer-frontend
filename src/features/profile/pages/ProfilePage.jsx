@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
@@ -18,11 +18,12 @@ import {
   passwordUpdateSchema,
 } from "../schemas/profileSchemas";
 import { useChangePassword } from "../../auth/hooks/useChangePassword";
+import { useUpdateProfile } from "../../auth/hooks/useUpdateProfile";
 import { applyServerFieldErrors } from "../../../lib/errorUtils";
 
 export function ProfilePage() {
   const { user } = useAuth();
-  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
 
   const profileForm = useForm({
@@ -50,12 +51,37 @@ export function ProfilePage() {
   }, [user, profileForm]);
 
   const onProfileSubmit = async (data) => {
-    setIsUpdatingProfile(true);
-    // Mock API call
-    setTimeout(() => {
-      setIsUpdatingProfile(false);
+    const payload = {};
+    const nextName = data.name?.trim();
+    const nextEmail = data.email?.trim();
+
+    if (nextName && nextName !== (user?.name || "")) {
+      payload.name = nextName;
+    }
+
+    if (nextEmail && nextEmail !== (user?.email || "")) {
+      payload.email = nextEmail;
+    }
+
+    if (!Object.keys(payload).length) {
+      profileForm.setError("root", {
+        type: "manual",
+        message: "Change your name or email before saving.",
+      });
+      return;
+    }
+
+    try {
+      const updated = await updateProfileMutation.mutateAsync(payload);
+      const updatedUser = updated.user ?? updated;
+      profileForm.reset({
+        name: updatedUser.name || nextName || "",
+        email: updatedUser.email || nextEmail || "",
+      });
       toast.success("Profile updated successfully!");
-    }, 1000);
+    } catch (error) {
+      applyServerFieldErrors(error, profileForm.setError);
+    }
   };
 
   const onPasswordSubmit = async (data) => {
@@ -142,8 +168,17 @@ export function ProfilePage() {
                 )}
               </div>
 
+              {profileForm.formState.errors.root && (
+                <p className="text-sm text-rose-500">
+                  {profileForm.formState.errors.root.message}
+                </p>
+              )}
+
               <div className="pt-2">
-                <Button type="submit" isLoading={isUpdatingProfile}>
+                <Button
+                  type="submit"
+                  isLoading={updateProfileMutation.isPending}
+                >
                   Save Changes
                 </Button>
               </div>

@@ -2,10 +2,11 @@ import { useResumes } from "../hooks/useResumes";
 import { UploadDropzone } from "../components/UploadDropzone";
 import { ResumeCard } from "../components/ResumeCard";
 import { Skeleton } from "../../../components/ui/Skeleton";
+import { QueryErrorState } from "../../../components/ui/States";
 import { FileText } from "lucide-react";
 
 export function ResumesPage() {
-  const { data: resumes, isLoading } = useResumes();
+  const { data: resumes, isLoading, isError, refetch } = useResumes();
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
@@ -25,7 +26,12 @@ export function ResumesPage() {
           Uploaded Files
         </h2>
 
-        {isLoading ? (
+        {isError ? (
+          <QueryErrorState
+            onRetry={refetch}
+            message="We could not load your resumes from the server."
+          />
+        ) : isLoading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-20 w-full rounded-[var(--radius-lg)]" />

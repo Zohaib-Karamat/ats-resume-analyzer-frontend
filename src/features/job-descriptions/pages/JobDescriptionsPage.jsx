@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Plus, Briefcase } from "lucide-react";
 import { useJobDescriptions } from "../hooks/useJobDescriptions";
 import { SearchBar } from "../components/SearchBar";
@@ -7,21 +7,52 @@ import { JDFormModal } from "../components/JDFormModal";
 import { Pagination } from "../../../components/ui/Pagination";
 import { Button } from "../../../components/ui/Button";
 import { Skeleton } from "../../../components/ui/Skeleton";
+import { QueryErrorState } from "../../../components/ui/States";
 
 export function JobDescriptionsPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [jdToEdit, setJdToEdit] = useState(null);
+  const serverSearch = search.length >= 4 ? search : "";
+  const queryLimit = search && search.length < 4 ? 100 : 5;
 
   // When search changes, reset to page 1
-  const handleSearch = (term) => {
-    setSearch(term);
+  const handleSearch = useCallback((term) => {
+    setSearch(term.trim());
     setPage(1);
-  };
+  }, []);
 
-  const { data, isLoading } = useJobDescriptions({ search, page });
-  const jds = data?.data || [];
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+  } = useJobDescriptions({
+    search: serverSearch,
+    page,
+    limit: queryLimit,
+    sort: "desc",
+  });
+  const searchTerm = search.toLowerCase();
+  const jds = useMemo(() => {
+    const items = data?.data || [];
+    if (!searchTerm) return items;
+
+    return items.filter((jd) => {
+      const searchableText = [
+        jd.title,
+        jd.company,
+        jd.content,
+        jd.description,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(searchTerm);
+    });
+  }, [data?.data, searchTerm]);
   const meta = data?.meta || { totalPages: 1 };
 
   const handleOpenCreate = () => {
@@ -57,7 +88,12 @@ export function JobDescriptionsPage() {
         </div>
 
         <div className="p-4 flex-1 overflow-y-auto">
-          {isLoading ? (
+          {isError ? (
+            <QueryErrorState
+              onRetry={refetch}
+              message="We could not load your job descriptions from the server."
+            />
+          ) : isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-48 w-full rounded-xl" />)}
             </div>
@@ -85,7 +121,7 @@ export function JobDescriptionsPage() {
           )}
         </div>
 
-        {jds.length > 0 && (
+        {jds.length > 0 && !search && (
           <Pagination 
             currentPage={page} 
             totalPages={meta.totalPages} 

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { UploadCloud, FileType, X } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { useUploadResume } from "../hooks/useUploadResume";
 import toast from "react-hot-toast";
 import { cn } from "../../../lib/utils";
@@ -53,7 +53,7 @@ export function UploadDropzone() {
     validateAndUpload(file);
     // Reset input so same file can be selected again if it failed
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 

@@ -8,14 +8,12 @@ export function useCreateAnalysis() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: ({ resumeId, jdId }) => analysisApi.createAnalysis(resumeId, jdId),
+    mutationFn: ({ resumeId, jdId }) =>
+      analysisApi.createAnalysis({ resumeId, jobDescriptionId: jdId }),
     onSuccess: (data) => {
       toast.success("Analysis complete!");
-      queryClient.invalidateQueries(["analysis", "history"]);
+      queryClient.invalidateQueries({ queryKey: ["analysis", "history"] });
       navigate(`/analysis/${data.id}`);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to analyze");
     },
   });
 }

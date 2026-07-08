@@ -10,10 +10,11 @@ import { SuggestionsAccordion } from "../components/SuggestionsAccordion";
 import { AISummaryCard } from "../components/AISummaryCard";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
 import { Skeleton } from "../../../components/ui/Skeleton";
+import { QueryErrorState } from "../../../components/ui/States";
 
 export function AnalysisResultPage() {
   const { id } = useParams();
-  const { data: analysis, isLoading } = useAnalysis(id);
+  const { data: analysis, isLoading, isError, refetch } = useAnalysis(id);
 
   if (isLoading) {
     return (
@@ -25,6 +26,16 @@ export function AnalysisResultPage() {
           <Skeleton className="h-64 rounded-2xl" />
         </div>
       </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <QueryErrorState
+        onRetry={refetch}
+        message="We could not load this analysis from the server."
+        className="mx-auto mt-12 max-w-2xl"
+      />
     );
   }
 

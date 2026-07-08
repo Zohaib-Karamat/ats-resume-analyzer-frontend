@@ -7,12 +7,12 @@ export function useUpdateJD() {
 
   return useMutation({
     mutationFn: (params) => jobDescriptionApi.update(params),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       toast.success("Job description updated");
-      queryClient.invalidateQueries(["job-descriptions"]);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to update job description");
+      queryClient.invalidateQueries({ queryKey: ["job-descriptions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["job-description", variables.id],
+      });
     },
   });
 }

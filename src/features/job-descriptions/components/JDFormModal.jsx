@@ -46,8 +46,19 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
 
   const onSubmit = (data) => {
     if (isEditing) {
+      const payload = {};
+
+      if (data.title !== jdToEdit.title) payload.title = data.title;
+      if (data.company !== jdToEdit.company) payload.company = data.company;
+      if (data.content !== jdToEdit.content) payload.content = data.content;
+
+      if (!Object.keys(payload).length) {
+        onClose();
+        return;
+      }
+
       updateJD(
-        { id: jdToEdit.id, data },
+        { id: jdToEdit.id, data: payload },
         { onSuccess: () => onClose() }
       );
     } else {

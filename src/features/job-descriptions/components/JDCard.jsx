@@ -1,14 +1,33 @@
 import { useState } from "react";
-import { Briefcase, Building, Calendar, Edit2, Trash2 } from "lucide-react";
+import { Building, Calendar, Edit2, Eye, Trash2 } from "lucide-react";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { IconButton } from "../../../components/ui/IconButton";
 import { Modal } from "../../../components/ui/Modal";
 import { Button } from "../../../components/ui/Button";
+import { Skeleton } from "../../../components/ui/Skeleton";
+import { QueryErrorState } from "../../../components/ui/States";
 import { useDeleteJD } from "../hooks/useDeleteJD";
+import { useJobDescription } from "../hooks/useJobDescription";
+
+function formatDate(date) {
+  if (!date) return "Unknown date";
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "Unknown date";
+  return parsed.toLocaleDateString();
+}
 
 export function JDCard({ jd, onEdit }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const { mutate: deleteJD, isPending } = useDeleteJD();
+  const {
+    data: jdDetails,
+    isLoading: isLoadingDetails,
+    isError: isDetailsError,
+    refetch: refetchDetails,
+  } = useJobDescription(jd.id, { enabled: isDetailsModalOpen });
+
+  const displayJD = jdDetails || jd;
 
   const handleDelete = () => {
     deleteJD(jd.id, {
@@ -27,7 +46,22 @@ export function JDCard({ jd, onEdit }) {
                   {jd.title}
                 </h3>
                 <div className="flex shrink-0 space-x-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 -mt-1 -mr-1">
-                  <IconButton variant="ghost" size="sm" title="Edit" onClick={() => onEdit(jd)}>
+                  <IconButton
+                    variant="ghost"
+                    size="sm"
+                    title="View"
+                    aria-label={`View ${jd.title}`}
+                    onClick={() => setIsDetailsModalOpen(true)}
+                  >
+                    <Eye className="h-4 w-4" />
+                  </IconButton>
+                  <IconButton
+                    variant="ghost"
+                    size="sm"
+                    title="Edit"
+                    aria-label={`Edit ${jd.title}`}
+                    onClick={() => onEdit(jd)}
+                  >
                     <Edit2 className="h-4 w-4" />
                   </IconButton>
                   <IconButton 
@@ -35,6 +69,7 @@ export function JDCard({ jd, onEdit }) {
                     size="sm" 
                     className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-500 dark:hover:bg-rose-950/50"
                     title="Delete"
+                    aria-label={`Delete ${jd.title}`}
                     onClick={() => setIsDeleteModalOpen(true)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -48,7 +83,7 @@ export function JDCard({ jd, onEdit }) {
                 </div>
                 <div className="flex items-center gap-1 bg-zinc-100 px-2 py-1 rounded-md dark:bg-zinc-800">
                   <Calendar className="h-3 w-3" />
-                  <span>{new Date(jd.date).toLocaleDateString()}</span>
+                  <span>{formatDate(jd.date)}</span>
                 </div>
               </div>
             </div>
@@ -59,6 +94,50 @@ export function JDCard({ jd, onEdit }) {
           </div>
         </CardContent>
       </Card>
+
+      <Modal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        title="Job Description"
+        className="max-w-3xl"
+      >
+        {isDetailsError ? (
+          <QueryErrorState
+            onRetry={refetchDetails}
+            message="We could not load this job description."
+            className="p-6"
+          />
+        ) : isLoadingDetails ? (
+          <div className="space-y-3">
+            <Skeleton className="h-6 w-2/3" />
+            <Skeleton className="h-5 w-1/2" />
+            <Skeleton className="h-40 w-full" />
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <div>
+              <h3 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
+                {displayJD.title}
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                <div className="flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
+                  <Building className="h-3 w-3" />
+                  <span>{displayJD.company}</span>
+                </div>
+                <div className="flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
+                  <Calendar className="h-3 w-3" />
+                  <span>{formatDate(displayJD.date)}</span>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40">
+              <p className="whitespace-pre-wrap text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                {displayJD.content}
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       <Modal 
         isOpen={isDeleteModalOpen} 

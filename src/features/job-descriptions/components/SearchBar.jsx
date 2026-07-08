@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "../../../components/ui/Input";
 
 export function SearchBar({ onSearch, placeholder = "Search..." }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      onSearch(searchTerm);
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm, onSearch]);
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    onSearch(value);
+  };
 
   return (
     <div className="relative flex-1 max-w-md">
@@ -23,7 +21,7 @@ export function SearchBar({ onSearch, placeholder = "Search..." }) {
         className="pl-10"
         placeholder={placeholder}
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleChange}
       />
     </div>
   );
