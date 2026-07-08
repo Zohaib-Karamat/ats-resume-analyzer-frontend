@@ -45,10 +45,72 @@ function getNestedResult(analysis) {
   return analysis?.result ?? analysis?.analysis ?? analysis?.aiAnalysis ?? {};
 }
 
+function parseRawResponse(analysis) {
+  const raw = analysis?.rawResponse ?? getNestedResult(analysis).rawResponse;
+  if (!raw) return {};
+
+  if (typeof raw === "object") return raw;
+
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) return {};
+
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch {
+        return {};
+      }
+    }
+  }
+
+  return {};
+}
+
+function buildKeywordScores(analysis, result, parsedRaw, score) {
+  const rawScores =
+    analysis.keywordScores ??
+    analysis.categoryScores ??
+    result.keywordScores ??
+    parsedRaw.keywordScores ??
+    parsedRaw.categoryScores;
+
+  if (rawScores) return normalizeKeywordScores(rawScores);
+
+  const keywordScore = Number(
+    analysis.keywordScore ??
+      result.keywordScore ??
+      parsedRaw.keywordScore ??
+      NaN,
+  );
+
+  const scores = [];
+  if (!Number.isNaN(keywordScore)) {
+    scores.push({ name: "Keyword Match", score: keywordScore });
+  }
+
+  const overallScore = Number(
+    analysis.overallScore ??
+      result.overallScore ??
+      parsedRaw.overallScore ??
+      score ??
+      NaN,
+  );
+
+  if (!Number.isNaN(overallScore) && overallScore !== keywordScore) {
+    scores.push({ name: "Overall Match", score: overallScore });
+  }
+
+  return scores;
+}
+
 function normalizeAnalysis(analysis) {
   if (!analysis) return analysis;
 
   const result = getNestedResult(analysis);
+  const parsedRaw = parseRawResponse(analysis);
   const resume = analysis.resume ?? analysis.resumeId ?? {};
   const jobDescription =
     analysis.jobDescription ?? analysis.jobDescriptionId ?? analysis.jd ?? {};
@@ -58,13 +120,35 @@ function normalizeAnalysis(analysis) {
       analysis.overallScore ??
       result.score ??
       result.matchScore ??
+      result.overallScore ??
+      parsedRaw.overallScore ??
+      parsedRaw.score ??
       0,
   );
   const matchedSkills = asArray(
-    analysis.matchedSkills ?? result.matchedSkills ?? result.matches,
+    analysis.matchedSkills ??
+      result.matchedSkills ??
+      result.matchingSkills ??
+      result.matchedKeywords ??
+      analysis.matchingSkills ??
+      analysis.matchedKeywords ??
+      analysis.skills?.matched ??
+      parsedRaw.matchingSkills ??
+      parsedRaw.matchedKeywords ??
+      parsedRaw.skills?.matched ??
+      result.matches ??
+      parsedRaw.matchedSkills,
   );
   const missingSkills = asArray(
-    analysis.missingSkills ?? result.missingSkills ?? result.gaps,
+    analysis.missingSkills ??
+      result.missingSkills ??
+      result.missingKeywords ??
+      analysis.missingKeywords ??
+      analysis.skills?.missing ??
+      parsedRaw.missingKeywords ??
+      parsedRaw.skills?.missing ??
+      result.gaps ??
+      parsedRaw.missingSkills,
   );
 
   return {
@@ -87,21 +171,44 @@ function normalizeAnalysis(analysis) {
       jobDescription.title ??
       "Job description",
     score,
+    keywordScore: Number(
+      analysis.keywordScore ??
+        result.keywordScore ??
+        parsedRaw.keywordScore ??
+        score,
+    ),
+    aiModel: analysis.aiModel ?? result.aiModel ?? parsedRaw.aiModel,
+    rawResponse: analysis.rawResponse ?? result.rawResponse ?? parsedRaw.rawResponse,
     createdAt: analysis.createdAt ?? analysis.updatedAt ?? new Date().toISOString(),
     aiSummary:
       analysis.aiSummary ??
       analysis.summary ??
       result.aiSummary ??
       result.summary ??
+      parsedRaw.summary ??
       "AI analysis completed. Review the score, skills, and suggestions below.",
     matchedSkills,
     missingSkills,
-    strengths: asArray(analysis.strengths ?? result.strengths),
-    weaknesses: asArray(analysis.weaknesses ?? result.weaknesses),
-    keywordScores: normalizeKeywordScores(
-      analysis.keywordScores ?? analysis.categoryScores ?? result.keywordScores,
+    strengths: asArray(
+      analysis.strengths ?? result.strengths ?? parsedRaw.strengths,
     ),
-    suggestions: normalizeSuggestions(analysis.suggestions ?? result.suggestions),
+    weaknesses: asArray(
+      analysis.weaknesses ?? result.weaknesses ?? parsedRaw.weaknesses,
+    ),
+    keywordScores: buildKeywordScores(analysis, result, parsedRaw, score),
+    suggestions: normalizeSuggestions(
+      analysis.suggestions ??
+        result.suggestions ?? {
+          atsSuggestions:
+            analysis.atsSuggestions ??
+            result.atsSuggestions ??
+            parsedRaw.atsSuggestions,
+          grammarSuggestions:
+            analysis.grammarSuggestions ??
+            result.grammarSuggestions ??
+            parsedRaw.grammarSuggestions,
+        },
+    ),
   };
 }
 

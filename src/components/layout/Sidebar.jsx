@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, FileText, Briefcase, History, User } from "lucide-react";
+import { LayoutDashboard, FileText, Briefcase, Sparkles, History, User } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Resumes", href: "/resumes", icon: FileText },
   { name: "Job Descriptions", href: "/job-descriptions", icon: Briefcase },
+  { name: "AI Analysis", href: "/analysis", icon: Sparkles },
   { name: "History", href: "/history", icon: History },
   { name: "Profile", href: "/profile", icon: User },
 ];

@@ -1,4 +1,5 @@
 import api from "../../../lib/axios";
+import { resolveAssetUrl } from "../../../lib/fileUrl";
 
 const FILE_NAME_KEYS = [
   "originalName",
@@ -70,6 +71,7 @@ function normalizeResume(resume) {
   const fileUrl = pickFirstString(
     ...sources.map((source) => pickFromObject(source, FILE_URL_KEYS)),
   );
+  const resolvedFileUrl = resolveAssetUrl(fileUrl);
   const parsedData =
     resume.parsedData ??
     resume.parsedResume ??
@@ -85,7 +87,7 @@ function normalizeResume(resume) {
     size,
     uploadDate,
     mimeType,
-    fileUrl,
+    fileUrl: resolvedFileUrl,
     parsedData,
   };
 }

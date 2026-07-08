@@ -2,8 +2,6 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useAnalysis } from "../hooks/useAnalysis";
 import { ScoreGauge } from "../components/ScoreGauge";
-import { KeywordMatchChart } from "../components/KeywordMatchChart";
-import { SkillDistributionChart } from "../components/SkillDistributionChart";
 import { SkillChip } from "../components/SkillChip";
 import { StrengthsWeaknesses } from "../components/StrengthsWeaknesses";
 import { SuggestionsAccordion } from "../components/SuggestionsAccordion";
@@ -11,6 +9,50 @@ import { AISummaryCard } from "../components/AISummaryCard";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
 import { Skeleton } from "../../../components/ui/Skeleton";
 import { QueryErrorState } from "../../../components/ui/States";
+
+function MetricCard({ label, value }) {
+  if (value === undefined || value === null || value === "") return null;
+
+  return (
+    <Card className="h-full">
+      <CardContent className="flex h-full flex-col justify-center p-5">
+        <p className="text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400">
+          {label}
+        </p>
+        <p className="mt-2 text-2xl font-bold text-zinc-950 dark:text-zinc-50">
+          {value}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SkillSection({ title, count, variant, skills, emptyMessage }) {
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40">
+      <h4
+        className={
+          variant === "matched"
+            ? "mb-3 text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400"
+            : "mb-3 text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400"
+        }
+      >
+        {title} ({count})
+      </h4>
+      <div className="flex flex-wrap gap-2">
+        {skills.length > 0 ? (
+          skills.map((skill) => (
+            <SkillChip key={skill} skill={skill} variant={variant} />
+          ))
+        ) : (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {emptyMessage}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function AnalysisResultPage() {
   const { id } = useParams();
@@ -65,73 +107,55 @@ export function AnalysisResultPage() {
             Analysis Results
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            ID: {analysis.id} • {new Date(analysis.createdAt).toLocaleString()}
+            {analysis.resumeName} • {analysis.jdTitle}
+          </p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">
+            {new Date(analysis.createdAt).toLocaleString()}
+            {analysis.keywordScore != null ? ` • Keyword score: ${analysis.keywordScore}%` : ""}
           </p>
         </div>
       </div>
 
-      {/* Top Row: AI Summary & Score */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 flex flex-col justify-center">
+      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="flex">
           <AISummaryCard summary={analysis.aiSummary} />
         </div>
-        <Card className="flex flex-col items-center justify-center py-6">
+        <Card className="flex min-h-[220px] flex-col items-center justify-center py-4">
           <ScoreGauge score={analysis.score} />
         </Card>
       </div>
 
-      {/* Middle Row: Charts & Skills */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        {/* Category Scores */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-base">Keyword Categories</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <KeywordMatchChart data={analysis.keywordScores} />
-          </CardContent>
-        </Card>
+      {(analysis.keywordScore || analysis.aiModel) && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {analysis.keywordScore && (
+            <MetricCard label="Keyword Score" value={`${analysis.keywordScore}%`} />
+          )}
+          {analysis.aiModel && (
+            <MetricCard label="AI Model" value={analysis.aiModel} />
+          )}
+        </div>
+      )}
 
-        {/* Skill Distribution */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-base">Skill Ratio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <SkillDistributionChart 
-              matchedCount={analysis.matchedSkills.length} 
-              missingCount={analysis.missingSkills.length} 
-            />
-          </CardContent>
-        </Card>
-
-        {/* Skills Lists */}
-        <Card className="lg:col-span-1 flex flex-col">
+      <div className="grid grid-cols-1 gap-6">
+        <Card>
           <CardHeader>
             <CardTitle className="text-base">Extracted Skills</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 space-y-6 overflow-y-auto">
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-3">
-                Matched ({analysis.matchedSkills.length})
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {analysis.matchedSkills.map(skill => (
-                  <SkillChip key={skill} skill={skill} variant="matched" />
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-3">
-                Missing ({analysis.missingSkills.length})
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {analysis.missingSkills.map(skill => (
-                  <SkillChip key={skill} skill={skill} variant="missing" />
-                ))}
-              </div>
-            </div>
+          <CardContent className="grid gap-4 lg:grid-cols-2">
+            <SkillSection
+              title="Matched"
+              count={analysis.matchedSkills.length}
+              variant="matched"
+              skills={analysis.matchedSkills}
+              emptyMessage="No matched skills returned."
+            />
+            <SkillSection
+              title="Missing"
+              count={analysis.missingSkills.length}
+              variant="missing"
+              skills={analysis.missingSkills}
+              emptyMessage="No missing skills returned."
+            />
           </CardContent>
         </Card>
       </div>

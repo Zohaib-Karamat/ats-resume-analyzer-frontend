@@ -2,8 +2,8 @@ import { Sparkles } from "lucide-react";
 
 export function AISummaryCard({ summary }) {
   return (
-    <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] shadow-sm">
-      <div className="relative h-full rounded-xl bg-white p-6 dark:bg-zinc-950">
+    <div className="relative flex min-h-[220px] w-full overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] shadow-sm">
+      <div className="relative flex h-full w-full flex-col justify-center rounded-xl bg-white p-6 dark:bg-zinc-950">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-indigo-500/10 blur-2xl" />
         
         <div className="flex items-center space-x-2 mb-3">

@@ -18,7 +18,7 @@ export function ScoreGauge({ score }) {
   const trackColor = isDark ? "#27272a" : "#f4f4f5"; // zinc-800 : zinc-100
 
   return (
-    <div className="relative flex h-64 w-full flex-col items-center justify-center">
+    <div className="relative flex h-52 w-full flex-col items-center justify-center">
       <div className="absolute inset-0">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart 

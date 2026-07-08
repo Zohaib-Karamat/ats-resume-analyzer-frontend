@@ -1,8 +1,16 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { useTheme } from "../../../contexts/ThemeContext";
 
-export function KeywordMatchChart({ data }) {
+export function KeywordMatchChart({ data = [] }) {
   const { isDark } = useTheme();
+
+  if (!data.length) {
+    return (
+      <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-zinc-50 px-4 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-400">
+        No keyword category scores were returned for this analysis.
+      </div>
+    );
+  }
 
   const getColor = (s) => {
     if (s >= 80) return isDark ? "#34d399" : "#10b981"; // emerald

@@ -12,6 +12,7 @@ export function useCreateAnalysis() {
       analysisApi.createAnalysis({ resumeId, jobDescriptionId: jdId }),
     onSuccess: (data) => {
       toast.success("Analysis complete!");
+      queryClient.setQueryData(["analysis", data.id], data);
       queryClient.invalidateQueries({ queryKey: ["analysis", "history"] });
       navigate(`/analysis/${data.id}`);
     },

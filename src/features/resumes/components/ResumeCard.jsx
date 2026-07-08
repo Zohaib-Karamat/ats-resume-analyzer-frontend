@@ -8,6 +8,7 @@ import { Skeleton } from "../../../components/ui/Skeleton";
 import { QueryErrorState } from "../../../components/ui/States";
 import { useDeleteResume } from "../hooks/useDeleteResume";
 import { useResume } from "../hooks/useResume";
+import { useResumePreview } from "../hooks/useResumePreview";
 
 function formatBytes(bytes, decimals = 2) {
   if (!+bytes) return "0 Bytes";
@@ -23,16 +24,6 @@ function formatDate(date) {
   const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) return "Unknown date";
   return parsed.toLocaleDateString();
-}
-
-function getResumePreviewUrl(resume) {
-  const url = resume?.fileUrl ?? resume?.url ?? resume?.downloadUrl ?? resume?.path ?? null;
-  if (!url) return null;
-  if (/^https?:\/\//i.test(url)) return url;
-  const normalizedUrl = url.replace(/\\/g, "/");
-  if (normalizedUrl.startsWith("/")) return `http://localhost:5000${normalizedUrl}`;
-  if (normalizedUrl.startsWith("uploads/")) return `http://localhost:5000/${normalizedUrl}`;
-  return url;
 }
 
 function getParsedData(resume) {
@@ -142,7 +133,7 @@ function ParsedResumeView({ resume }) {
 
 function DetailRow({ label, value }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-zinc-100 py-3 last:border-0 dark:border-zinc-800">
+    <div className="flex items-start justify-between gap-4 border-b border-zinc-100 py-3 dark:border-zinc-800">
       <dt className="text-xs font-medium uppercase text-zinc-500 dark:text-zinc-400">
         {label}
       </dt>
@@ -165,7 +156,14 @@ export function ResumeCard({ resume }) {
   } = useResume(resume.id, { enabled: isDetailsModalOpen });
 
   const displayResume = resumeDetails || resume;
-  const previewUrl = getResumePreviewUrl(displayResume);
+  const {
+    previewUrl,
+    directUrl,
+    isLoading: isLoadingPreview,
+    error: previewError,
+    canPreview,
+    openFile,
+  } = useResumePreview(displayResume, isDetailsModalOpen);
 
   const handleDelete = () => {
     deleteResume(resume.id, {
@@ -256,16 +254,16 @@ export function ResumeCard({ resume }) {
                 </div>
               </div>
 
-              {previewUrl && (
-                <a
-                  href={previewUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md bg-indigo-600 px-3 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-950"
+              {(directUrl || previewUrl) && (
+                <Button
+                  type="button"
+                  size="sm"
+                  className="inline-flex shrink-0 items-center gap-2"
+                  onClick={openFile}
                 >
                   <ExternalLink className="h-4 w-4" />
                   Open file
-                </a>
+                </Button>
               )}
             </div>
 
@@ -275,7 +273,23 @@ export function ResumeCard({ resume }) {
               <DetailRow label="Type" value={displayResume.mimeType || "Resume file"} />
             </dl>
 
-            {previewUrl && (
+            {canPreview && isLoadingPreview && (
+              <div className="space-y-3 rounded-lg border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-800 dark:bg-zinc-900/40">
+                <Skeleton className="h-[70vh] w-full rounded-lg" />
+                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">
+                  Loading PDF preview...
+                </p>
+              </div>
+            )}
+
+            {canPreview && previewError && !previewUrl && (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+                Could not render an inline preview. Use Open file to view the
+                resume in a new tab.
+              </div>
+            )}
+
+            {canPreview && previewUrl && (
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900">
                 <iframe
                   title={displayResume.name}
@@ -285,9 +299,22 @@ export function ResumeCard({ resume }) {
               </div>
             )}
 
+            {!canPreview && directUrl && (
+              <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-6 text-center dark:border-zinc-800 dark:bg-zinc-900/40">
+                <FileText className="mx-auto h-6 w-6 text-zinc-400" />
+                <p className="mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  Inline preview unavailable
+                </p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  This file type cannot be previewed in the browser. Use Open
+                  file to download or view it externally.
+                </p>
+              </div>
+            )}
+
             <ParsedResumeView resume={displayResume} />
 
-            {!previewUrl && !getParsedData(displayResume) && (
+            {!directUrl && !previewUrl && !getParsedData(displayResume) && (
               <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-6 text-center dark:border-zinc-800 dark:bg-zinc-900/40">
                 <FileText className="mx-auto h-6 w-6 text-zinc-400" />
                 <p className="mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">
