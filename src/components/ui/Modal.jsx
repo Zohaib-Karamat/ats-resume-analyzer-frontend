@@ -40,7 +40,7 @@ export function Modal({ isOpen, onClose, title, children, className }) {
       aria-modal="true"
       className={cn(
         "backdrop:bg-zinc-950/50 backdrop:backdrop-blur-sm",
-        "w-full max-w-lg rounded-[var(--radius-xl)] bg-white p-0 shadow-lg dark:bg-zinc-900",
+        "m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-lg overflow-hidden rounded-[var(--radius-xl)] bg-white p-0 shadow-lg dark:bg-zinc-900",
         "open:animate-in open:fade-in-90 open:zoom-in-95",
         className
       )}
@@ -53,7 +53,7 @@ export function Modal({ isOpen, onClose, title, children, className }) {
           <X className="h-4 w-4" aria-hidden="true" />
         </IconButton>
       </div>
-      <div className="p-6">
+      <div className="max-h-[calc(90vh-73px)] overflow-y-auto p-6">
         {children}
       </div>
     </dialog>
