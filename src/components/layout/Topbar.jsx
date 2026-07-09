@@ -35,7 +35,7 @@ export function Topbar({ onMenuClick }) {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 flex-shrink-0 items-center gap-x-4 border-b border-zinc-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-zinc-800 dark:bg-zinc-950">
+    <header className="sticky top-0 z-10 flex h-16 flex-shrink-0 items-center gap-x-3 border-b border-zinc-200 bg-white px-3 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-zinc-800 dark:bg-zinc-950">
       <IconButton
         variant="ghost"
         className="-m-2.5 p-2.5 text-zinc-700 lg:hidden dark:text-zinc-300"
@@ -51,9 +51,9 @@ export function Topbar({ onMenuClick }) {
         aria-hidden="true"
       />
 
-      <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+      <div className="flex min-w-0 flex-1 gap-x-3 self-stretch lg:gap-x-6">
         <div className="flex flex-1"></div>
-        <div className="flex items-center gap-x-4 lg:gap-x-6">
+        <div className="flex min-w-0 items-center gap-x-2 sm:gap-x-4 lg:gap-x-6">
           <IconButton variant="ghost" onClick={toggleTheme}>
             <span className="sr-only">Toggle theme</span>
             {theme === "dark" ? (
