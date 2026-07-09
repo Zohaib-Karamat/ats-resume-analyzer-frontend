@@ -101,7 +101,7 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
           {errors.content && <p className="text-sm text-rose-500">{errors.content.message}</p>}
         </div>
 
-        <div className="flex justify-end space-x-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="flex flex-col-reverse gap-3 border-t border-zinc-200 pt-4 sm:flex-row sm:justify-end dark:border-zinc-800">
           <Button type="button" variant="ghost" onClick={onClose} disabled={isPending}>
             Cancel
           </Button>

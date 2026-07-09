@@ -9,9 +9,9 @@ export function ResumesPage() {
   const { data: resumes, isLoading, isError, refetch } = useResumes();
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="mx-auto max-w-5xl space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
           My Resumes
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">

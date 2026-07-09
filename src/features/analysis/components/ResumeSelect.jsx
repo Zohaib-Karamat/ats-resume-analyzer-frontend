@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useResumes } from "../../resumes/hooks/useResumes";
 import { Skeleton } from "../../../components/ui/Skeleton";
 import { Card, CardContent } from "../../../components/ui/Card";
@@ -26,7 +25,7 @@ export function ResumeSelect({ selectedId, onSelect }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 max-h-[300px] overflow-y-auto p-1">
+    <div className="grid max-h-[290px] grid-cols-1 gap-3 overflow-y-auto p-1 sm:max-h-[300px]">
       {resumes.map((resume) => (
         <Card 
           key={resume.id}
@@ -38,12 +37,12 @@ export function ResumeSelect({ selectedId, onSelect }) {
           )}
           onClick={() => onSelect(resume.id)}
         >
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+          <CardContent className="flex items-center justify-between gap-3 p-4">
+            <div className="flex min-w-0 items-center space-x-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400">
                 <FileText className="h-5 w-5" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">{resume.name}</p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
                   {new Date(resume.uploadDate).toLocaleDateString()}

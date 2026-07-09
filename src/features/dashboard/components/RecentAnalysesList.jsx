@@ -18,7 +18,7 @@ function getScoreColor(score) {
 export function RecentAnalysesList({ analyses, isLoading }) {
   if (isLoading) {
     return (
-      <Card>
+      <Card className="h-full">
         <CardHeader>
           <CardTitle>Recent Analyses</CardTitle>
         </CardHeader>
@@ -38,7 +38,7 @@ export function RecentAnalysesList({ analyses, isLoading }) {
   }
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Recent Analyses</CardTitle>
       </CardHeader>
@@ -48,16 +48,16 @@ export function RecentAnalysesList({ analyses, isLoading }) {
             {analyses.map((analysis) => (
               <div 
                 key={analysis.id} 
-                className="flex items-center justify-between border-b border-zinc-100 pb-4 last:border-0 last:pb-0 dark:border-zinc-800"
+                className="flex items-start justify-between gap-3 border-b border-zinc-100 pb-4 last:border-0 last:pb-0 dark:border-zinc-800"
               >
-                <div className="flex flex-col">
+                <div className="flex min-w-0 flex-col">
                   <Link 
                     to={`/analysis/${analysis.id}`}
-                    className="text-sm font-medium text-zinc-950 hover:underline dark:text-zinc-50"
+                    className="truncate text-sm font-medium text-zinc-950 hover:underline dark:text-zinc-50"
                   >
                     {analysis.resumeName}
                   </Link>
-                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                  <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
                     {analysis.jobTitle} • {formatRelativeTime(analysis.date)}
                   </span>
                 </div>

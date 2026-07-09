@@ -3,6 +3,7 @@ import { StatCard } from "../components/StatCard";
 import { RecentAnalysesList } from "../components/RecentAnalysesList";
 import { FileText, Briefcase, Activity, Target } from "lucide-react";
 import { useAuth } from "../../../hooks/useAuth";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
 
 export function DashboardPage() {
   const { user } = useAuth();
@@ -17,9 +18,9 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
           Welcome back, {user?.name?.split(' ')[0] || "User"}
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
@@ -61,23 +62,23 @@ export function DashboardPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <RecentAnalysesList 
             analyses={data?.recentAnalyses} 
             isLoading={isLoading} 
           />
         </div>
-        
-        {/* Placeholder for future right column (e.g., quick actions, tips) */}
-        <div className="space-y-4">
-          <div className="rounded-xl border border-dashed border-zinc-200 bg-zinc-50 p-6 text-center dark:border-zinc-800 dark:bg-zinc-900/50">
-            <h3 className="text-sm font-medium text-zinc-950 dark:text-zinc-50">Quick Tip</h3>
-            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle>Quick Tip</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm leading-6 text-zinc-500 dark:text-zinc-400">
               Tailoring your resume to specific job descriptions increases your chances of getting an interview by 40%.
             </p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

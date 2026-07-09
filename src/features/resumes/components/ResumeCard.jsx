@@ -194,7 +194,7 @@ export function ResumeCard({ resume }) {
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 space-x-2 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+            <div className="flex shrink-0 space-x-2 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
               <IconButton
                 variant="ghost"
                 size="sm"
@@ -267,7 +267,7 @@ export function ResumeCard({ resume }) {
               )}
             </div>
 
-            <dl className="grid gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40 sm:grid-cols-3">
+            <dl className="grid gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40 md:grid-cols-3">
               <DetailRow label="File size" value={formatBytes(displayResume.size)} />
               <DetailRow label="Uploaded" value={formatDate(displayResume.uploadDate)} />
               <DetailRow label="Type" value={displayResume.mimeType || "Resume file"} />

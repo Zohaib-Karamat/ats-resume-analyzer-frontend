@@ -21,16 +21,16 @@ export function NewAnalysisPage() {
 
   if (isPending) {
     return (
-      <div className="mx-auto max-w-4xl py-12">
+      <div className="mx-auto max-w-4xl py-8 sm:py-12">
         <AnalysisLoadingState />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 h-full flex flex-col">
+    <div className="mx-auto flex h-full max-w-5xl flex-col space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
           New Analysis
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
@@ -39,11 +39,11 @@ export function NewAnalysisPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card className="flex flex-col h-[400px]">
+        <Card className="flex min-h-[360px] flex-col lg:h-[400px]">
           <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
             <CardTitle className="text-lg">1. Choose Resume</CardTitle>
           </CardHeader>
-          <CardContent className="p-3 flex-1 overflow-hidden">
+          <CardContent className="flex-1 overflow-hidden p-3">
             <ResumeSelect 
               selectedId={selectedResumeId} 
               onSelect={setSelectedResumeId} 
@@ -51,11 +51,11 @@ export function NewAnalysisPage() {
           </CardContent>
         </Card>
 
-        <Card className="flex flex-col h-[400px]">
+        <Card className="flex min-h-[360px] flex-col lg:h-[400px]">
           <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
             <CardTitle className="text-lg">2. Choose Job Description</CardTitle>
           </CardHeader>
-          <CardContent className="p-3 flex-1 overflow-hidden">
+          <CardContent className="flex-1 overflow-hidden p-3">
             <JobDescriptionSelect 
               selectedId={selectedJdId} 
               onSelect={setSelectedJdId} 

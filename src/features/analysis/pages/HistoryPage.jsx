@@ -59,9 +59,9 @@ export function HistoryPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto h-full flex flex-col">
+    <div className="mx-auto flex h-full max-w-7xl flex-col space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
           Analysis History
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
@@ -69,7 +69,7 @@ export function HistoryPage() {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 max-w-md w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <Search className="h-4 w-4 text-zinc-400" aria-hidden="true" />
@@ -140,10 +140,10 @@ export function HistoryPage() {
                     onClick={() => navigate(`/analysis/${item.id}`)}
                     className="cursor-pointer hover:bg-zinc-50 transition-colors dark:hover:bg-zinc-900/50"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                    <td className="max-w-[220px] truncate px-6 py-4 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                       {item.resumeName}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">
+                    <td className="max-w-[260px] truncate px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400">
                       {item.jdTitle}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -172,7 +172,7 @@ export function HistoryPage() {
           </div>
 
           {/* Mobile Card View */}
-          <div className="md:hidden space-y-4">
+          <div className="space-y-4 md:hidden">
             {sortedAndFiltered.map((item) => (
               <Card 
                 key={item.id} 

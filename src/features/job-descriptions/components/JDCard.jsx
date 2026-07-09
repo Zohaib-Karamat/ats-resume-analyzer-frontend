@@ -45,7 +45,7 @@ export function JDCard({ jd, onEdit }) {
                 <h3 className="text-lg font-semibold text-zinc-900 line-clamp-1 dark:text-zinc-100" title={jd.title}>
                   {jd.title}
                 </h3>
-                <div className="flex shrink-0 space-x-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 -mt-1 -mr-1">
+                <div className="-mr-1 -mt-1 flex shrink-0 space-x-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
                   <IconButton
                     variant="ghost"
                     size="sm"
@@ -79,7 +79,7 @@ export function JDCard({ jd, onEdit }) {
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
                 <div className="flex items-center gap-1 bg-zinc-100 px-2 py-1 rounded-md dark:bg-zinc-800">
                   <Building className="h-3 w-3" />
-                  <span className="truncate max-w-[120px]">{jd.company}</span>
+                  <span className="max-w-[160px] truncate sm:max-w-[120px]">{jd.company}</span>
                 </div>
                 <div className="flex items-center gap-1 bg-zinc-100 px-2 py-1 rounded-md dark:bg-zinc-800">
                   <Calendar className="h-3 w-3" />
@@ -148,7 +148,7 @@ export function JDCard({ jd, onEdit }) {
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Are you sure you want to delete <span className="font-semibold text-zinc-900 dark:text-zinc-100">{jd.title} at {jd.company}</span>? This action cannot be undone.
           </p>
-          <div className="flex justify-end space-x-3 pt-4">
+          <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end">
             <Button 
               variant="ghost" 
               onClick={() => setIsDeleteModalOpen(false)}

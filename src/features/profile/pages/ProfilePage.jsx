@@ -101,9 +101,9 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto h-full flex flex-col pb-12">
+    <div className="mx-auto flex h-full max-w-4xl flex-col space-y-6 pb-12 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
           Account Settings
         </h1>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
@@ -111,7 +111,7 @@ export function ProfilePage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
         {/* Profile Info Form */}
         <Card>
           <CardHeader>

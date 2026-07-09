@@ -60,7 +60,7 @@ export function UploadDropzone() {
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-12 transition-colors",
+        "relative flex min-h-[180px] flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 transition-colors sm:min-h-[220px] sm:p-12",
         isDragging
           ? "border-indigo-500 bg-indigo-50/50 dark:border-indigo-400 dark:bg-indigo-900/20"
           : "border-zinc-300 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900/50 dark:hover:bg-zinc-900",
@@ -79,13 +79,14 @@ export function UploadDropzone() {
         className="hidden"
       />
       
-      <div className="flex flex-col items-center justify-center space-y-4 text-center cursor-pointer">
+      <div className="flex cursor-pointer flex-col items-center justify-center space-y-4 text-center">
         <div className="rounded-full bg-zinc-200/50 p-4 dark:bg-zinc-800/50">
           <UploadCloud className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
         </div>
         <div>
           <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            <span className="text-indigo-600 dark:text-indigo-400">Click to upload</span> or drag and drop
+            <span className="text-indigo-600 dark:text-indigo-400">Click to upload</span>{" "}
+            <span className="hidden sm:inline">or drag and drop</span>
           </p>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
             PDF or DOCX (max. 5MB)
@@ -95,7 +96,7 @@ export function UploadDropzone() {
 
       {isPending && (
         <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-white/80 backdrop-blur-sm dark:bg-zinc-950/80">
-          <div className="w-64 space-y-2 text-center">
+          <div className="w-full max-w-64 space-y-2 px-4 text-center">
             <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
               Uploading... {progress}%
             </p>

@@ -66,24 +66,24 @@ export function JobDescriptionsPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto h-full flex flex-col">
+    <div className="mx-auto flex h-full max-w-7xl flex-col space-y-6 sm:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">
             Job Descriptions
           </h1>
           <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
             Manage the job descriptions you want to tailor your resumes against.
           </p>
         </div>
-        <Button onClick={handleOpenCreate}>
+        <Button onClick={handleOpenCreate} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Add Job Description
         </Button>
       </div>
 
       <div className="flex flex-col bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden dark:bg-zinc-950 dark:border-zinc-800 flex-1">
-        <div className="p-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="border-b border-zinc-200 p-4 dark:border-zinc-800">
           <SearchBar onSearch={handleSearch} placeholder="Search by title or company..." />
         </div>
 

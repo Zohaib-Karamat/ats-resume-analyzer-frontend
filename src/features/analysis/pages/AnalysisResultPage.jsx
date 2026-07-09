@@ -60,7 +60,7 @@ export function AnalysisResultPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto space-y-8 h-full flex flex-col p-4">
+      <div className="mx-auto flex h-full max-w-7xl flex-col space-y-6 p-2 sm:space-y-8 sm:p-4">
         <Skeleton className="h-64 w-full rounded-2xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Skeleton className="h-64 rounded-2xl" />
@@ -93,9 +93,9 @@ export function AnalysisResultPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 pb-12">
+    <div className="mx-auto max-w-7xl space-y-6 pb-12 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-start gap-3 sm:items-center sm:gap-4">
         <Link 
           to="/dashboard" 
           className="rounded-full bg-zinc-100 p-2 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors"
@@ -103,10 +103,10 @@ export function AnalysisResultPage() {
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+          <h1 className="text-xl font-bold tracking-tight text-zinc-950 sm:text-2xl dark:text-zinc-50">
             Analysis Results
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="break-words text-sm text-zinc-500 dark:text-zinc-400">
             {analysis.resumeName} • {analysis.jdTitle}
           </p>
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
@@ -116,7 +116,7 @@ export function AnalysisResultPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-1 items-stretch gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="flex">
           <AISummaryCard summary={analysis.aiSummary} />
         </div>
