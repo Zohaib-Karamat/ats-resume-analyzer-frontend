@@ -8,6 +8,22 @@ export const authApi = {
     const response = await api.post("/auth/register", userData);
     return response.data.data;
   },
+  verifyEmail: async (payload) => {
+    const response = await api.post("/auth/verify-email", payload);
+    return response.data.data;
+  },
+  resendVerificationOtp: async (payload) => {
+    const response = await api.post("/auth/resend-verification-otp", payload);
+    return response.data.data;
+  },
+  forgotPassword: async (payload) => {
+    const response = await api.post("/auth/forgot-password", payload);
+    return response.data.data;
+  },
+  resetPassword: async (payload) => {
+    const response = await api.post("/auth/reset-password", payload);
+    return response.data.data;
+  },
   login: async (credentials) => {
     const response = await api.post("/auth/login", credentials);
     return response.data.data;

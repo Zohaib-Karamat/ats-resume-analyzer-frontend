@@ -34,6 +34,10 @@ api.interceptors.request.use(
 const NON_SESSION_401_ENDPOINTS = [
   "/auth/login",
   "/auth/register",
+  "/auth/verify-email",
+  "/auth/resend-verification-otp",
+  "/auth/forgot-password",
+  "/auth/reset-password",
   "/auth/change-password",
 ];
 

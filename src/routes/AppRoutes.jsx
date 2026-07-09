@@ -2,10 +2,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { DashboardLayout } from "../components/layout/DashboardLayout";
 import { ProtectedRoute } from "../components/auth/ProtectedRoute";
-import { PlaceholderPage } from "../pages/PlaceholderPage";
 import { NotFound } from "../pages/NotFound";
 import { Login } from "../features/auth/pages/Login";
 import { Register } from "../features/auth/pages/Register";
+import { VerifyEmail } from "../features/auth/pages/VerifyEmail";
+import { ForgotPassword } from "../features/auth/pages/ForgotPassword";
+import { ResetPassword } from "../features/auth/pages/ResetPassword";
 import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
 import { ResumesPage } from "../features/resumes/pages/ResumesPage";
 import { JobDescriptionsPage } from "../features/job-descriptions/pages/JobDescriptionsPage";
@@ -21,6 +23,9 @@ export function AppRoutes() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
 
       {/* Protected routes */}

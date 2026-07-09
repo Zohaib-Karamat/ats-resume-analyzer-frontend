@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginSchema } from "../schemas/authSchemas";
 import { useLogin } from "../hooks/useLogin";
-import { applyServerFieldErrors } from "../../../lib/errorUtils";
+import { applyServerFieldErrors, parseApiError } from "../../../lib/errorUtils";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
 import {
@@ -18,7 +18,9 @@ import toast from "react-hot-toast";
 
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const loginMutation = useLogin();
+  const initialEmail = location.state?.email || "";
 
   const {
     register,
@@ -27,6 +29,10 @@ export function Login() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: initialEmail,
+      password: "",
+    },
   });
 
   const onSubmit = async (data) => {
@@ -38,6 +44,11 @@ export function Login() {
       // A generic toast is already shown by the axios interceptor; if the
       // backend flagged specific fields, surface those inline too.
       applyServerFieldErrors(error, setError);
+
+      const { message } = parseApiError(error);
+      if (/verify|verified|verification/i.test(message)) {
+        navigate("/verify-email", { state: { email: data.email } });
+      }
     }
   };
 
@@ -70,7 +81,7 @@ export function Login() {
                 Password
               </label>
               <Link
-                href="/forgot-password"
+                to="/forgot-password"
                 className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
               >
                 Forgot password?
