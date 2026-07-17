@@ -11,7 +11,7 @@ function useCountUp(end, duration = 1000) {
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
-      
+
       if (progress < duration) {
         // ease out cubic
         const p = progress / duration;
@@ -33,8 +33,8 @@ function useCountUp(end, duration = 1000) {
 
 export function StatCard({ title, value, icon: Icon, isPercent = false }) {
   const count = useCountUp(value);
-  const displayValue = isPercent 
-    ? count.toFixed(1) + "%" 
+  const displayValue = isPercent
+    ? count.toFixed(1) + "%"
     : Math.floor(count).toLocaleString();
 
   return (
@@ -57,3 +57,4 @@ export function StatCard({ title, value, icon: Icon, isPercent = false }) {
     </Card>
   );
 }
+

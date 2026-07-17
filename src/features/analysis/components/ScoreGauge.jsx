@@ -21,21 +21,21 @@ export function ScoreGauge({ score }) {
     <div className="relative flex h-44 w-full flex-col items-center justify-center sm:h-52">
       <div className="absolute inset-0">
         <ResponsiveContainer width="100%" height="100%">
-          <RadialBarChart 
-            cx="50%" 
-            cy="50%" 
-            innerRadius="70%" 
-            outerRadius="100%" 
-            barSize={16} 
+          <RadialBarChart
+            cx="50%"
+            cy="50%"
+            innerRadius="70%"
+            outerRadius="100%"
+            barSize={16}
             data={data}
             startAngle={90}
             endAngle={-270}
           >
-            <PolarAngleAxis 
-              type="number" 
-              domain={[0, 100]} 
-              angleAxisId={0} 
-              tick={false} 
+            <PolarAngleAxis
+              type="number"
+              domain={[0, 100]}
+              angleAxisId={0}
+              tick={false}
             />
             {/* Background Track */}
             <RadialBar
@@ -48,7 +48,7 @@ export function ScoreGauge({ score }) {
           </RadialBarChart>
         </ResponsiveContainer>
       </div>
-      
+
       {/* Center Text */}
       <div className="z-10 flex flex-col items-center">
         <span className="text-4xl font-bold tracking-tight text-zinc-950 text-number dark:text-zinc-50">

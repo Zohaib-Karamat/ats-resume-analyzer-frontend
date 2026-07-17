@@ -96,8 +96,8 @@ export function AnalysisResultPage() {
     <div className="mx-auto max-w-7xl space-y-6 pb-12 sm:space-y-8">
       {/* Header */}
       <div className="flex items-start gap-3 sm:items-center sm:gap-4">
-        <Link 
-          to="/dashboard" 
+        <Link
+          to="/dashboard"
           className="rounded-full bg-zinc-100 p-2 text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors"
         >
           <ArrowLeft className="h-5 w-5" />
@@ -161,9 +161,9 @@ export function AnalysisResultPage() {
       </div>
 
       {/* Strengths & Weaknesses */}
-      <StrengthsWeaknesses 
-        strengths={analysis.strengths} 
-        weaknesses={analysis.weaknesses} 
+      <StrengthsWeaknesses
+        strengths={analysis.strengths}
+        weaknesses={analysis.weaknesses}
       />
 
       {/* Actionable Suggestions */}

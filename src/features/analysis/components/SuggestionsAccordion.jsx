@@ -20,11 +20,11 @@ function AccordionItem({ title, icon: Icon, items = [], defaultOpen = false }) {
             {items.length}
           </span>
         </div>
-        <ChevronDown 
-          className={cn("h-5 w-5 text-zinc-400 transition-transform duration-200", isOpen && "rotate-180")} 
+        <ChevronDown
+          className={cn("h-5 w-5 text-zinc-400 transition-transform duration-200", isOpen && "rotate-180")}
         />
       </button>
-      
+
       {isOpen && (
         <div className="border-t border-zinc-100 px-4 py-4 dark:border-zinc-800">
           <ul className="space-y-4">
@@ -48,16 +48,16 @@ export function SuggestionsAccordion({ suggestions }) {
 
   return (
     <div className="space-y-4">
-      <AccordionItem 
-        title="ATS Optimization Rules" 
-        icon={Briefcase} 
-        items={suggestions.ats} 
+      <AccordionItem
+        title="ATS Optimization Rules"
+        icon={Briefcase}
+        items={suggestions.ats}
         defaultOpen={true}
       />
-      <AccordionItem 
-        title="Grammar & Phrasing" 
-        icon={SpellCheck} 
-        items={suggestions.grammar} 
+      <AccordionItem
+        title="Grammar & Phrasing"
+        icon={SpellCheck}
+        items={suggestions.grammar}
       />
     </div>
   );

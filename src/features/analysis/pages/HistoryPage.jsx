@@ -39,8 +39,8 @@ export function HistoryPage() {
   };
 
   const sortedAndFiltered = (history || [])
-    .filter(item => 
-      item.resumeName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    .filter(item =>
+      item.resumeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.jdTitle?.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
@@ -106,8 +106,8 @@ export function HistoryPage() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider dark:text-zinc-400">
                     Job Description
                   </th>
-                  <th 
-                    scope="col" 
+                  <th
+                    scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider dark:text-zinc-400 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors group"
                     onClick={() => handleSort("score")}
                   >
@@ -117,8 +117,8 @@ export function HistoryPage() {
                       <SortIcon active={sortBy === "score"} order={sortOrder} />
                     </div>
                   </th>
-                  <th 
-                    scope="col" 
+                  <th
+                    scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider dark:text-zinc-400 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors group"
                     onClick={() => handleSort("date")}
                   >
@@ -135,8 +135,8 @@ export function HistoryPage() {
               </thead>
               <tbody className="bg-white divide-y divide-zinc-200 dark:bg-zinc-950 dark:divide-zinc-800">
                 {sortedAndFiltered.map((item) => (
-                  <tr 
-                    key={item.id} 
+                  <tr
+                    key={item.id}
                     onClick={() => navigate(`/analysis/${item.id}`)}
                     className="cursor-pointer hover:bg-zinc-50 transition-colors dark:hover:bg-zinc-900/50"
                   >
@@ -174,8 +174,8 @@ export function HistoryPage() {
           {/* Mobile Card View */}
           <div className="space-y-4 md:hidden">
             {sortedAndFiltered.map((item) => (
-              <Card 
-                key={item.id} 
+              <Card
+                key={item.id}
                 className="cursor-pointer transition-colors hover:border-indigo-300 dark:hover:border-indigo-700"
                 onClick={() => navigate(`/analysis/${item.id}`)}
               >

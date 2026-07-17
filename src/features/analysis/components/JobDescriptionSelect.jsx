@@ -9,7 +9,7 @@ export function JobDescriptionSelect({ selectedId, onSelect }) {
   // but for now we fetch the first page to allow selection.
   const { data, isLoading } = useJobDescriptions({ search: "", page: 1, limit: 10 });
   const jds = data?.data || [];
-  
+
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -30,12 +30,12 @@ export function JobDescriptionSelect({ selectedId, onSelect }) {
   return (
     <div className="grid max-h-[290px] grid-cols-1 gap-3 overflow-y-auto p-1 sm:max-h-[300px]">
       {jds.map((jd) => (
-        <Card 
+        <Card
           key={jd.id}
           className={cn(
             "cursor-pointer transition-all hover:border-indigo-300 dark:hover:border-indigo-700",
-            selectedId === jd.id 
-              ? "border-2 border-indigo-500 bg-indigo-50/30 dark:border-indigo-500 dark:bg-indigo-900/20" 
+            selectedId === jd.id
+              ? "border-2 border-indigo-500 bg-indigo-50/30 dark:border-indigo-500 dark:bg-indigo-900/20"
               : "border border-zinc-200 dark:border-zinc-800"
           )}
           onClick={() => onSelect(jd.id)}

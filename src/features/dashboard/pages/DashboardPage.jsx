@@ -64,9 +64,9 @@ export function DashboardPage() {
       {/* Main Content Area */}
       <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <RecentAnalysesList 
-            analyses={data?.recentAnalyses} 
-            isLoading={isLoading} 
+          <RecentAnalysesList
+            analyses={data?.recentAnalyses}
+            isLoading={isLoading}
           />
         </div>
         <Card className="h-full">

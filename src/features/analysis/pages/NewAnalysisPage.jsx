@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui
 export function NewAnalysisPage() {
   const [selectedResumeId, setSelectedResumeId] = useState(null);
   const [selectedJdId, setSelectedJdId] = useState(null);
-  
+
   const { mutate: createAnalysis, isPending } = useCreateAnalysis();
 
   const handleAnalyze = () => {
@@ -44,9 +44,9 @@ export function NewAnalysisPage() {
             <CardTitle className="text-lg">1. Choose Resume</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden p-3">
-            <ResumeSelect 
-              selectedId={selectedResumeId} 
-              onSelect={setSelectedResumeId} 
+            <ResumeSelect
+              selectedId={selectedResumeId}
+              onSelect={setSelectedResumeId}
             />
           </CardContent>
         </Card>
@@ -56,17 +56,17 @@ export function NewAnalysisPage() {
             <CardTitle className="text-lg">2. Choose Job Description</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-hidden p-3">
-            <JobDescriptionSelect 
-              selectedId={selectedJdId} 
-              onSelect={setSelectedJdId} 
+            <JobDescriptionSelect
+              selectedId={selectedJdId}
+              onSelect={setSelectedJdId}
             />
           </CardContent>
         </Card>
       </div>
 
       <div className="flex justify-end pt-4">
-        <Button 
-          size="lg" 
+        <Button
+          size="lg"
           onClick={handleAnalyze}
           disabled={!selectedResumeId || !selectedJdId}
           isLoading={isPending}

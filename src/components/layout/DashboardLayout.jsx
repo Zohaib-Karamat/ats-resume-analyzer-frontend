@@ -12,7 +12,7 @@ export function DashboardLayout() {
     <div className="flex min-h-dvh overflow-hidden bg-zinc-50 dark:bg-zinc-950">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-zinc-900/80 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />

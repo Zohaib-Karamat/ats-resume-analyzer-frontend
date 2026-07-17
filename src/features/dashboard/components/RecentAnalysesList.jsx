@@ -46,12 +46,12 @@ export function RecentAnalysesList({ analyses, isLoading }) {
         {analyses && analyses.length > 0 ? (
           <div className="space-y-4">
             {analyses.map((analysis) => (
-              <div 
-                key={analysis.id} 
+              <div
+                key={analysis.id}
                 className="flex items-start justify-between gap-3 border-b border-zinc-100 pb-4 last:border-0 last:pb-0 dark:border-zinc-800"
               >
                 <div className="flex min-w-0 flex-col">
-                  <Link 
+                  <Link
                     to={`/analysis/${analysis.id}`}
                     className="truncate text-sm font-medium text-zinc-950 hover:underline dark:text-zinc-50"
                   >
@@ -72,8 +72,8 @@ export function RecentAnalysesList({ analyses, isLoading }) {
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
               No analyses performed yet.
             </p>
-            <Link 
-              to="/analysis" 
+            <Link
+              to="/analysis"
               className="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
             >
               Start a new analysis
@@ -84,3 +84,4 @@ export function RecentAnalysesList({ analyses, isLoading }) {
     </Card>
   );
 }
+

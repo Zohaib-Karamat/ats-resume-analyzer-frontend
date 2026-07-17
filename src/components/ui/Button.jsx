@@ -15,14 +15,14 @@ const sizes = {
   lg: "h-12 px-8 text-lg",
 };
 
-export const Button = forwardRef(({ 
-  className, 
-  variant = "primary", 
-  size = "md", 
-  isLoading = false, 
-  children, 
-  disabled, 
-  ...props 
+export const Button = forwardRef(({
+  className,
+  variant = "primary",
+  size = "md",
+  isLoading = false,
+  children,
+  disabled,
+  ...props
 }, ref) => {
   return (
     <button

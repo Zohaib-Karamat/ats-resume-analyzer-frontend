@@ -6,7 +6,7 @@ import { cn } from "../../../lib/utils";
 
 export function ResumeSelect({ selectedId, onSelect }) {
   const { data: resumes, isLoading } = useResumes();
-  
+
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -27,12 +27,12 @@ export function ResumeSelect({ selectedId, onSelect }) {
   return (
     <div className="grid max-h-[290px] grid-cols-1 gap-3 overflow-y-auto p-1 sm:max-h-[300px]">
       {resumes.map((resume) => (
-        <Card 
+        <Card
           key={resume.id}
           className={cn(
             "cursor-pointer transition-all hover:border-indigo-300 dark:hover:border-indigo-700",
-            selectedId === resume.id 
-              ? "border-2 border-indigo-500 bg-indigo-50/30 dark:border-indigo-500 dark:bg-indigo-900/20" 
+            selectedId === resume.id
+              ? "border-2 border-indigo-500 bg-indigo-50/30 dark:border-indigo-500 dark:bg-indigo-900/20"
               : "border border-zinc-200 dark:border-zinc-800"
           )}
           onClick={() => onSelect(resume.id)}

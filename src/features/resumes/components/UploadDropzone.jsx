@@ -78,7 +78,7 @@ export function UploadDropzone() {
         accept=".pdf,.docx"
         className="hidden"
       />
-      
+
       <div className="flex cursor-pointer flex-col items-center justify-center space-y-4 text-center">
         <div className="rounded-full bg-zinc-200/50 p-4 dark:bg-zinc-800/50">
           <UploadCloud className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
@@ -101,7 +101,7 @@ export function UploadDropzone() {
               Uploading... {progress}%
             </p>
             <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-              <div 
+              <div
                 className="h-full bg-indigo-600 transition-all duration-300 ease-out dark:bg-indigo-500"
                 style={{ width: `${progress}%` }}
               />
