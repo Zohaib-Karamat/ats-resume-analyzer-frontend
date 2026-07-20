@@ -15,6 +15,8 @@ import { NewAnalysisPage } from "../features/analysis/pages/NewAnalysisPage";
 import { AnalysisResultPage } from "../features/analysis/pages/AnalysisResultPage";
 import { HistoryPage } from "../features/analysis/pages/HistoryPage";
 import { ProfilePage } from "../features/profile/pages/ProfilePage";
+import { CoverLettersPage } from "../features/cover-letters/pages/CoverLettersPage";
+import { CoverLetterDetailPage } from "../features/cover-letters/pages/CoverLetterDetailPage";
 
 export function AppRoutes() {
   return (
@@ -35,6 +37,11 @@ export function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/resumes" element={<ResumesPage />} />
           <Route path="/job-descriptions" element={<JobDescriptionsPage />} />
+          <Route path="/cover-letters" element={<CoverLettersPage />} />
+          <Route
+            path="/cover-letters/:id"
+            element={<CoverLetterDetailPage />}
+          />
           <Route path="/analysis" element={<NewAnalysisPage />} />
           <Route path="/analysis/:id" element={<AnalysisResultPage />} />
           <Route path="/history" element={<HistoryPage />} />

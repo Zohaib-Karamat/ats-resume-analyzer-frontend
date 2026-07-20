@@ -1,11 +1,20 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, FileText, Briefcase, Sparkles, History, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  FileText,
+  Briefcase,
+  Sparkles,
+  History,
+  User,
+  Mail,
+} from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Resumes", href: "/resumes", icon: FileText },
   { name: "Job Descriptions", href: "/job-descriptions", icon: Briefcase },
+  { name: "Cover Letters", href: "/cover-letters", icon: Mail },
   { name: "AI Analysis", href: "/analysis", icon: Sparkles },
   { name: "History", href: "/history", icon: History },
   { name: "Profile", href: "/profile", icon: User },
@@ -13,7 +22,12 @@ const navItems = [
 
 export function Sidebar({ className }) {
   return (
-    <div className={cn("flex h-full w-64 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950", className)}>
+    <div
+      className={cn(
+        "flex h-full w-64 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950",
+        className,
+      )}
+    >
       <div className="flex h-16 items-center px-6">
         <span className="text-xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
           ATS Analyzer
@@ -31,7 +45,7 @@ export function Sidebar({ className }) {
                   "group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300"
-                    : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                    : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800/50",
                 )
               }
             >
