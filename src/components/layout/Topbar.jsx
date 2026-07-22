@@ -79,8 +79,8 @@ export function Topbar({ onMenuClick }) {
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open user menu</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
-                <User className="h-5 w-5" />
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
+                {user?.name ? user.name.charAt(0).toUpperCase() : <User className="h-5 w-5" />}
               </div>
             </IconButton>
 
