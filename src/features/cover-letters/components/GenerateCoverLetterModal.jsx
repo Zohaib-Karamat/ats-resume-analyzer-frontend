@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { X, Loader2 } from "lucide-react";
 import { useGenerateCoverLetter } from "../hooks/useCoverLetters";
@@ -7,6 +8,7 @@ import { useJobDescriptions } from "../../job-descriptions/hooks/useJobDescripti
 import { applyServerFieldErrors } from "../../../lib/errorUtils";
 
 export function GenerateCoverLetterModal({ isOpen, onClose }) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -36,8 +38,12 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
         jobDescriptionId: data.jobDescriptionId,
       },
       {
-        onSuccess: () => {
+        onSuccess: (resData) => {
           onClose();
+          const coverLetter = resData?.data;
+          if (coverLetter && (coverLetter._id || coverLetter.id)) {
+            navigate(`/cover-letters/${coverLetter._id || coverLetter.id}`);
+          }
         },
         onError: (error) => {
           applyServerFieldErrors(error, setError);

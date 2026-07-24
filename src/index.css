@@ -133,3 +133,20 @@ h6 {
     background-size: 200% auto;
     animation: text-gradient 4s linear infinite;
 }
+
+/* ─── Global Interactive Cursors ─── */
+button, 
+a, 
+[role="button"], 
+[role="link"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+    cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+[aria-disabled="true"] {
+    cursor: not-allowed;
+}

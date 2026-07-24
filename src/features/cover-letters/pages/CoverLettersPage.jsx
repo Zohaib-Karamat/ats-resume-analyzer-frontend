@@ -3,16 +3,25 @@ import { Link } from "react-router-dom";
 import { Mail, Plus, FileText, Trash2, Download, AlertCircle, Loader2 } from "lucide-react";
 import { useCoverLetters, useDeleteCoverLetter, useDownloadCoverLetterPdf } from "../hooks/useCoverLetters";
 import { GenerateCoverLetterModal } from "../components/GenerateCoverLetterModal";
+import { Modal } from "../../../components/ui/Modal";
+import { Button } from "../../../components/ui/Button";
 
 export function CoverLettersPage() {
   const { data: coverLetters, isLoading, error } = useCoverLetters();
   const deleteMutation = useDeleteCoverLetter();
   const downloadMutation = useDownloadCoverLetterPdf();
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
+  const [coverLetterToDelete, setCoverLetterToDelete] = useState(null);
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this cover letter?")) {
-      deleteMutation.mutate(id);
+    setCoverLetterToDelete(id);
+  };
+
+  const confirmDelete = () => {
+    if (coverLetterToDelete) {
+      deleteMutation.mutate(coverLetterToDelete, {
+        onSettled: () => setCoverLetterToDelete(null),
+      });
     }
   };
 
@@ -89,10 +98,10 @@ export function CoverLettersPage() {
                   </span>
                 </div>
                 <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-1 line-clamp-1">
-                  {cl.jobTitle || "Cover Letter"}
+                  {cl.jobDescription?.title || "Cover Letter"}
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">
-                  {cl.companyName || "For selected job description"}
+                  {cl.jobDescription?.company ? `For ${cl.jobDescription.company}` : "For selected job description"}
                 </p>
               </div>
               <div className="border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-4 flex justify-between items-center">
@@ -132,6 +141,32 @@ export function CoverLettersPage() {
           onClose={() => setIsGenerateModalOpen(false)}
         />
       )}
+
+      <Modal
+        isOpen={!!coverLetterToDelete}
+        onClose={() => setCoverLetterToDelete(null)}
+        title="Delete Cover Letter"
+      >
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          Are you sure you want to delete this cover letter? This action cannot be undone.
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button
+            variant="ghost"
+            onClick={() => setCoverLetterToDelete(null)}
+            disabled={deleteMutation.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={confirmDelete}
+            isLoading={deleteMutation.isPending}
+          >
+            Delete
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

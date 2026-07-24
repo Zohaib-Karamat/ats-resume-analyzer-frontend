@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Download, Trash2, Loader2, AlertCircle, Calendar } from "lucide-react";
 import { useCoverLetter, useDeleteCoverLetter, useDownloadCoverLetterPdf } from "../hooks/useCoverLetters";
+import { Modal } from "../../../components/ui/Modal";
+import { Button } from "../../../components/ui/Button";
 
 export function CoverLetterDetailPage() {
   const { id } = useParams();
@@ -10,14 +13,19 @@ export function CoverLetterDetailPage() {
   const deleteMutation = useDeleteCoverLetter();
   const downloadMutation = useDownloadCoverLetterPdf();
 
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this cover letter?")) {
-      deleteMutation.mutate(id, {
-        onSuccess: () => {
-          navigate("/cover-letters");
-        },
-      });
-    }
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        setIsDeleteDialogOpen(false);
+        navigate("/cover-letters");
+      },
+    });
   };
 
   const handleDownload = () => {
@@ -99,11 +107,11 @@ export function CoverLetterDetailPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
-                {coverLetter.jobTitle || "Cover Letter"}
+                {coverLetter.jobDescription?.title || "Cover Letter"}
               </h2>
-              {coverLetter.companyName && (
+              {coverLetter.jobDescription?.company && (
                 <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                  {coverLetter.companyName}
+                  {coverLetter.jobDescription.company}
                 </p>
               )}
             </div>
@@ -119,6 +127,31 @@ export function CoverLetterDetailPage() {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title="Delete Cover Letter"
+      >
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          Are you sure you want to delete this cover letter? This action cannot be undone.
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button
+            variant="ghost"
+            onClick={() => setIsDeleteDialogOpen(false)}
+            disabled={deleteMutation.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={confirmDelete}
+            isLoading={deleteMutation.isPending}
+          >
+            Delete
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

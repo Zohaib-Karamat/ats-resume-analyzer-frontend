@@ -22,9 +22,9 @@ export const useGenerateCoverLetter = () => {
 
   return useMutation({
     mutationFn: coverLettersApi.generate,
-    onSuccess: () => {
+    onSuccess: (resData) => {
       queryClient.invalidateQueries({ queryKey: ["cover-letters"] });
-      toast.success("Cover letter generated successfully!");
+      toast.success(resData?.message || "Cover letter generated successfully!");
     },
   });
 };

@@ -6,7 +6,7 @@ export const coverLettersApi = {
       resumeId,
       jobDescriptionId,
     });
-    return response.data.data;
+    return response.data;
   },
 
   getAll: async () => {
