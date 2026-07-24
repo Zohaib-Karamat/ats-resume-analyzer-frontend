@@ -9,7 +9,7 @@ export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-dvh overflow-hidden bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div

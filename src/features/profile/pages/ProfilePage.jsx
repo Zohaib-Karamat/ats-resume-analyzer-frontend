@@ -269,7 +269,7 @@ export function ProfilePage() {
               <div className="pt-2">
                 <Button
                   type="submit"
-                  variant="secondary"
+                  variant="primary"
                   isLoading={changePasswordMutation.isPending}
                 >
                   Update Password
