@@ -79,7 +79,7 @@ export function ResetPassword() {
               inputMode="numeric"
               autoComplete="one-time-code"
               maxLength={6}
-              placeholder="123456"
+              placeholder="Enter your 6-digit code"
               {...register("otp")}
             />
             {errors.otp && (
