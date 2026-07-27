@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, Trash2, Loader2, AlertCircle, Calendar } from "lucide-react";
+import { ArrowLeft, Download, Trash2, Loader2, AlertCircle, Calendar, Copy, Check } from "lucide-react";
 import { useCoverLetter, useDeleteCoverLetter, useDownloadCoverLetterPdf } from "../hooks/useCoverLetters";
 import { Modal } from "../../../components/ui/Modal";
 import { Button } from "../../../components/ui/Button";
@@ -14,6 +14,16 @@ export function CoverLetterDetailPage() {
   const downloadMutation = useDownloadCoverLetterPdf();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    const text = coverLetter?.content || coverLetter?.body || "";
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const handleDelete = () => {
     setIsDeleteDialogOpen(true);
@@ -66,7 +76,7 @@ export function CoverLetterDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           to="/cover-letters"
           className="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
@@ -74,18 +84,29 @@ export function CoverLetterDetailPage() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to list
         </Link>
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={handleCopy}
+            title={copied ? "Copied!" : "Copy to clipboard"}
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-800 transition-colors"
+          >
+            {copied ? (
+              <><Check className="h-4 w-4 text-green-500 sm:mr-1.5" /><span className="hidden sm:inline">Copied!</span></>
+            ) : (
+              <><Copy className="h-4 w-4 sm:mr-1.5" /><span className="hidden sm:inline">Copy Text</span></>
+            )}
+          </button>
           <button
             onClick={handleDownload}
             disabled={downloadMutation.isPending}
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-800 transition-colors"
           >
             {downloadMutation.isPending ? (
-              <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin sm:mr-1.5" />
             ) : (
-              <Download className="mr-1.5 h-4 w-4" />
+              <Download className="h-4 w-4 sm:mr-1.5" />
             )}
-            Download PDF
+            <span className="hidden sm:inline">Download PDF</span>
           </button>
           <button
             onClick={handleDelete}

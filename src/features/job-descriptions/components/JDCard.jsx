@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Building, Calendar, Edit2, Eye, Trash2 } from "lucide-react";
+import { Building, Calendar, Edit2, Eye, Trash2, Copy, Check } from "lucide-react";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { IconButton } from "../../../components/ui/IconButton";
 import { Modal } from "../../../components/ui/Modal";
@@ -19,6 +19,7 @@ function formatDate(date) {
 export function JDCard({ jd, onEdit }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { mutate: deleteJD, isPending } = useDeleteJD();
   const {
     data: jdDetails,
@@ -28,6 +29,14 @@ export function JDCard({ jd, onEdit }) {
   } = useJobDescription(jd.id, { enabled: isDetailsModalOpen });
 
   const displayJD = jdDetails || jd;
+
+  const handleCopy = () => {
+    const text = [displayJD.title, displayJD.company, displayJD.content].filter(Boolean).join("\n\n");
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const handleDelete = () => {
     deleteJD(jd.id, {
@@ -119,7 +128,7 @@ export function JDCard({ jd, onEdit }) {
               <h3 className="text-xl font-semibold text-zinc-950 dark:text-zinc-50">
                 {displayJD.title}
               </h3>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
                 <div className="flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
                   <Building className="h-3 w-3" />
                   <span>{displayJD.company}</span>
@@ -128,6 +137,17 @@ export function JDCard({ jd, onEdit }) {
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(displayJD.date)}</span>
                 </div>
+                <button
+                  onClick={handleCopy}
+                  title={copied ? "Copied!" : "Copy to clipboard"}
+                  className="ml-auto inline-flex items-center rounded-md bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  {copied ? (
+                    <><Check className="mr-1.5 h-3.5 w-3.5 text-green-500" /><span>Copied!</span></>
+                  ) : (
+                    <><Copy className="mr-1.5 h-3.5 w-3.5" /><span>Copy</span></>
+                  )}
+                </button>
               </div>
             </div>
             <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/40">
