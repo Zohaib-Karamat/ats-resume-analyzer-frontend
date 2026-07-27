@@ -9,6 +9,8 @@ import { Skeleton } from "../../../components/ui/Skeleton";
 import { Card, CardContent } from "../../../components/ui/Card";
 import { IconButton } from "../../../components/ui/IconButton";
 import { QueryErrorState } from "../../../components/ui/States";
+import { Modal } from "../../../components/ui/Modal";
+import { Button } from "../../../components/ui/Button";
 
 function getScoreColor(score) {
   if (score >= 80) return "success";
@@ -27,6 +29,7 @@ export function HistoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("date"); // 'date' | 'score'
   const [sortOrder, setSortOrder] = useState("desc"); // 'asc' | 'desc'
+  const [analysisToDelete, setAnalysisToDelete] = useState(null);
   const navigate = useNavigate();
 
   const handleSort = (field) => {
@@ -53,9 +56,17 @@ export function HistoryPage() {
       return sortOrder === "asc" ? comparison : -comparison;
     });
 
-  const handleDelete = (event, id) => {
+  const handleDeleteClick = (event, item) => {
     event.stopPropagation();
-    deleteAnalysis(id);
+    setAnalysisToDelete(item);
+  };
+
+  const confirmDelete = () => {
+    if (analysisToDelete) {
+      deleteAnalysis(analysisToDelete.id, {
+        onSuccess: () => setAnalysisToDelete(null),
+      });
+    }
   };
 
   return (
@@ -160,7 +171,7 @@ export function HistoryPage() {
                         aria-label={`Delete analysis ${item.id}`}
                         className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-500 dark:hover:bg-rose-950/50"
                         disabled={isDeleting}
-                        onClick={(event) => handleDelete(event, item.id)}
+                        onClick={(event) => handleDeleteClick(event, item)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </IconButton>
@@ -194,7 +205,7 @@ export function HistoryPage() {
                       aria-label={`Delete analysis ${item.id}`}
                       className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-500 dark:hover:bg-rose-950/50"
                       disabled={isDeleting}
-                      onClick={(event) => handleDelete(event, item.id)}
+                      onClick={(event) => handleDeleteClick(event, item)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </IconButton>
@@ -220,6 +231,42 @@ export function HistoryPage() {
           )}
         </div>
       )}
+
+      <Modal
+        isOpen={!!analysisToDelete}
+        onClose={() => !isDeleting && setAnalysisToDelete(null)}
+        title="Delete Analysis History"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Are you sure you want to delete the analysis for{" "}
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+              {analysisToDelete?.resumeName}
+            </span>{" "}
+            against{" "}
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+              {analysisToDelete?.jdTitle}
+            </span>
+            ? This action cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-3 pt-4">
+            <Button
+              variant="ghost"
+              onClick={() => setAnalysisToDelete(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              isLoading={isDeleting}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
