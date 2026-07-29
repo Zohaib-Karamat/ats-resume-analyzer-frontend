@@ -8,10 +8,30 @@ export function useCreateAnalysis() {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: ({ resumeId, jdId }) =>
-      analysisApi.createAnalysis({ resumeId, jobDescriptionId: jdId }),
+    mutationFn: async ({ resumeId, jdId }) => {
+      let history = queryClient.getQueryData(["analysis", "history"]);
+      if (!history) {
+        history = await analysisApi.getAnalysisHistory();
+      }
+
+      const existing = history?.find(
+        (h) => h.resumeId === resumeId && h.jdId === jdId
+      );
+
+      if (existing) {
+        return { ...existing, _isExisting: true };
+      }
+
+      return analysisApi.createAnalysis({ resumeId, jobDescriptionId: jdId });
+    },
     onSuccess: (data) => {
-      toast.success("Analysis complete!");
+      if (data._isExisting) {
+        toast.success("Analysis already exists.");
+      } else if (data._originalMessage) {
+        toast.success(data._originalMessage);
+      } else {
+        toast.success("Analysis complete!");
+      }
       queryClient.setQueryData(["analysis", data.id], data);
       queryClient.invalidateQueries({ queryKey: ["analysis", "history"] });
       navigate(`/analysis/${data.id}`);

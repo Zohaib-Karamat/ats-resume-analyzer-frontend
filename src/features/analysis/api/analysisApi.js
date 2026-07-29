@@ -231,7 +231,11 @@ export const analysisApi = {
       resumeId,
       jobDescriptionId,
     });
-    return normalizePayload(unwrapData(response));
+    const normalized = normalizePayload(unwrapData(response));
+    return {
+      ...normalized,
+      _originalMessage: response.data?.message || response.message || response.data?.data?.message,
+    };
   },
 
   getAnalysisById: async (id) => {
