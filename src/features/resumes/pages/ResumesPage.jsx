@@ -4,9 +4,13 @@ import { ResumeCard } from "../components/ResumeCard";
 import { Skeleton } from "../../../components/ui/Skeleton";
 import { QueryErrorState } from "../../../components/ui/States";
 import { FileText } from "lucide-react";
+import { CoachMark } from "../../../components/Onboarding/CoachMark";
+import { useOnboarding } from "../../../components/Onboarding/OnboardingContext";
 
 export function ResumesPage() {
   const { data: resumes, isLoading, isError, refetch } = useResumes();
+  const { isActive, currentStep } = useOnboarding();
+  const showCoachMark = isActive && currentStep === 1;
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 sm:space-y-8">
@@ -20,6 +24,11 @@ export function ResumesPage() {
       </div>
 
       <UploadDropzone />
+
+      {/* Onboarding guidance */}
+      {showCoachMark && (
+        <CoachMark targetLabel="Upload Resume button above" />
+      )}
 
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">

@@ -8,12 +8,16 @@ import { Pagination } from "../../../components/ui/Pagination";
 import { Button } from "../../../components/ui/Button";
 import { Skeleton } from "../../../components/ui/Skeleton";
 import { QueryErrorState } from "../../../components/ui/States";
+import { CoachMark } from "../../../components/Onboarding/CoachMark";
+import { useOnboarding } from "../../../components/Onboarding/OnboardingContext";
 
 export function JobDescriptionsPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [jdToEdit, setJdToEdit] = useState(null);
+  const { isActive, currentStep } = useOnboarding();
+  const showCoachMark = isActive && currentStep === 2;
   const serverSearch = search.length >= 4 ? search : "";
   const queryLimit = search && search.length < 4 ? 100 : 5;
 
@@ -67,6 +71,11 @@ export function JobDescriptionsPage() {
 
   return (
     <div className="mx-auto flex h-full max-w-7xl flex-col space-y-6 sm:space-y-8">
+      {/* Onboarding guidance */}
+      {showCoachMark && (
+        <CoachMark targetLabel="Add Job Description button" />
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-950 sm:text-3xl dark:text-zinc-50">

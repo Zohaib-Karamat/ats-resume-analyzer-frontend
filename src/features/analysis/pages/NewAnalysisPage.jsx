@@ -6,16 +6,23 @@ import { useCreateAnalysis } from "../hooks/useCreateAnalysis";
 import { Button } from "../../../components/ui/Button";
 import { Zap } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/Card";
+import { CoachMark } from "../../../components/Onboarding/CoachMark";
+import { useOnboarding } from "../../../components/Onboarding/OnboardingContext";
 
 export function NewAnalysisPage() {
   const [selectedResumeId, setSelectedResumeId] = useState(null);
   const [selectedJdId, setSelectedJdId] = useState(null);
+  const { isActive, currentStep, complete } = useOnboarding();
+  const showCoachMark = isActive && currentStep === 3;
 
   const { mutate: createAnalysis, isPending } = useCreateAnalysis();
 
   const handleAnalyze = () => {
     if (selectedResumeId && selectedJdId) {
-      createAnalysis({ resumeId: selectedResumeId, jdId: selectedJdId });
+      createAnalysis(
+        { resumeId: selectedResumeId, jdId: selectedJdId },
+        { onSuccess: () => { if (isActive && currentStep === 3) complete(); } }
+      );
     }
   };
 
@@ -37,6 +44,11 @@ export function NewAnalysisPage() {
           Select a resume and job description, then run the AI match analysis.
         </p>
       </div>
+
+      {/* Onboarding guidance */}
+      {showCoachMark && (
+        <CoachMark targetLabel="Select resume, job description, then click Analyze" />
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card className="flex min-h-[360px] flex-col lg:h-[400px]">

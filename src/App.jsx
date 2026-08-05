@@ -4,6 +4,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { ToastProvider } from "./components/ToastProvider";
 import { AppRoutes } from "./routes/AppRoutes";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { OnboardingProvider } from "./components/Onboarding/OnboardingContext";
 
 // Note: error toasts + logging for API errors are handled centrally by the
 // axios response interceptor (see src/lib/axios.js), so queries/mutations
@@ -24,7 +25,9 @@ function App() {
       <ThemeProvider>
         <BrowserRouter>
           <ErrorBoundary>
-            <AppRoutes />
+            <OnboardingProvider>
+              <AppRoutes />
+            </OnboardingProvider>
           </ErrorBoundary>
           <ToastProvider />
         </BrowserRouter>

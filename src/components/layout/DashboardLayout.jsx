@@ -4,6 +4,8 @@ import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { PageTransition } from "./PageTransition";
 import { cn } from "../../lib/utils";
+import { WelcomeModal } from "../Onboarding/WelcomeModal";
+import { CelebrationModal } from "../Onboarding/CelebrationModal";
 
 export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -39,6 +41,10 @@ export function DashboardLayout() {
           </PageTransition>
         </main>
       </div>
+
+      {/* Onboarding overlays */}
+      <WelcomeModal />
+      <CelebrationModal />
     </div>
   );
 }

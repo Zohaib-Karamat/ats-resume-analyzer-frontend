@@ -44,4 +44,8 @@ export const authApi = {
     const response = await api.post("/auth/change-password", payload);
     return response.data.data;
   },
+  updateOnboarding: async (payload) => {
+    const response = await api.patch("/auth/me/onboarding", payload);
+    return response.data.data;
+  },
 };

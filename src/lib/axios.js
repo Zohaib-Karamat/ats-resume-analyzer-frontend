@@ -39,6 +39,7 @@ const NON_SESSION_401_ENDPOINTS = [
   "/auth/forgot-password",
   "/auth/reset-password",
   "/auth/change-password",
+  "/auth/logout",
 ];
 
 // Response Interceptor — the single place responsible for turning API
@@ -58,12 +59,25 @@ api.interceptors.response.use(
 
     if (status === 401 && !isNonSessionEndpoint) {
       // Auto-logout on 401 Unauthorized (expired/invalid session token)
-      useAuthStore.getState().logout();
-      // Only redirect if we're not already on the login page to avoid loops
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      const authStore = useAuthStore.getState();
+      
+      // Only show the expiration message if they actually had a session token
+      // This prevents stray background queries/retries from showing the error
+      // after the user has already logged out or on first load.
+      if (authStore.token) {
+        if (!authStore.sessionExpiredShown) {
+          authStore.setSessionExpiredShown(true);
+          toast.error("Your session has expired. Please log in again.", {
+            id: "session-expired",
+          });
+        }
+        
+        authStore.logout();
+        // Only redirect if we're not already on the login page to avoid loops
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
       }
-      toast.error("Your session has expired. Please log in again.");
     } else {
       toast.error(message);
     }

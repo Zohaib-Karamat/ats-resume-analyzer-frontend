@@ -20,6 +20,7 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(jdSchema),
@@ -43,6 +44,10 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
       }
     }
   }, [isOpen, jdToEdit, reset]);
+
+  const contentValue = watch("content") || "";
+  const contentLength = contentValue.trim().length;
+  const isContentValid = contentLength >= 250;
 
   const onSubmit = (data) => {
     if (isEditing) {
@@ -90,9 +95,14 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium leading-none dark:text-zinc-300">
-            Job Description Content
-          </label>
+          <div className="flex justify-between">
+            <label className="text-sm font-medium leading-none dark:text-zinc-300">
+              Job Description Content
+            </label>
+            <span className={`text-xs ${contentLength < 250 ? "text-rose-500" : "text-emerald-500"}`}>
+              {contentLength} / 250 characters
+            </span>
+          </div>
           <TextArea 
             placeholder="Paste the full job description here..." 
             className="min-h-[200px]"
@@ -105,7 +115,7 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
           <Button type="button" variant="ghost" onClick={onClose} disabled={isPending}>
             Cancel
           </Button>
-          <Button type="submit" isLoading={isPending}>
+          <Button type="submit" isLoading={isPending} disabled={!isContentValid}>
             {isEditing ? "Save Changes" : "Save Job Description"}
           </Button>
         </div>
