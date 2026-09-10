@@ -18,7 +18,7 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
 
   const { data: resumes, isLoading: isLoadingResumes } = useResumes();
   const { data: jdData, isLoading: isLoadingJds } = useJobDescriptions({ limit: 50 });
-  const { elapsed, ...generateMutation } = useGenerateCoverLetter();
+  const generateMutation = useGenerateCoverLetter();
 
   // Close on escape key
   useEffect(() => {
@@ -154,7 +154,7 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
               {generateMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {elapsed > 0 ? `Generating... ${elapsed}s` : "Generating..."}
+                  Generating...
                 </>
               ) : (
                 "Generate"

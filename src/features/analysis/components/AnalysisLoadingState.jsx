@@ -9,7 +9,7 @@ const steps = [
   { icon: Sparkles, text: "Generating actionable suggestions..." },
 ];
 
-export function AnalysisLoadingState({ elapsed = 0 }) {
+export function AnalysisLoadingState() {
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
@@ -58,9 +58,7 @@ export function AnalysisLoadingState({ elapsed = 0 }) {
               {steps[currentStep].text}
             </h3>
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {elapsed > 0
-                ? `AI is working... ${elapsed}s elapsed`
-                : "This may take up to 60s on the live server..."}
+              This usually takes a few seconds...
             </p>
           </motion.div>
         </AnimatePresence>

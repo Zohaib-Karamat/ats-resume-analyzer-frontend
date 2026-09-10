@@ -6,15 +6,9 @@ import { logApiError } from "./logger";
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-// Default timeout for regular requests (auth, CRUD, etc.)
-const DEFAULT_TIMEOUT = 30_000;
-
-// Extended timeout for AI-driven endpoints that call Gemini
-export const AI_TIMEOUT = 120_000; // 2 minutes
-
 const api = axios.create({
   baseURL,
-  timeout: DEFAULT_TIMEOUT,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -28,17 +22,6 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
-    // AI endpoints need a longer timeout — apply it automatically
-    const AI_ENDPOINTS = ["/analysis", "/cover-letters/generate"];
-    const isAiEndpoint = AI_ENDPOINTS.some(
-      (endpoint) =>
-        config.url?.includes(endpoint) && config.method?.toLowerCase() === "post"
-    );
-    if (isAiEndpoint) {
-      config.timeout = AI_TIMEOUT;
-    }
-
     return config;
   },
   (error) => Promise.reject(error),

@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { coverLettersApi } from "../api/coverLettersApi";
 import toast from "react-hot-toast";
-import { useElapsedTimer } from "../../../hooks/useElapsedTimer";
 
 export const useCoverLetters = () => {
   return useQuery({
@@ -21,18 +20,13 @@ export const useCoverLetter = (id) => {
 export const useGenerateCoverLetter = () => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  return useMutation({
     mutationFn: coverLettersApi.generate,
     onSuccess: (resData) => {
       queryClient.invalidateQueries({ queryKey: ["cover-letters"] });
       toast.success(resData?.message || "Cover letter generated successfully!");
     },
   });
-
-  // Track elapsed seconds while the mutation is in flight
-  const elapsed = useElapsedTimer(mutation.isPending);
-
-  return { ...mutation, elapsed };
 };
 
 export const useDeleteCoverLetter = () => {

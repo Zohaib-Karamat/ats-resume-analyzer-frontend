@@ -15,7 +15,7 @@ export function NewAnalysisPage() {
   const { isActive, currentStep, complete } = useOnboarding();
   const showCoachMark = isActive && currentStep === 3;
 
-  const { mutate: createAnalysis, isPending, elapsed } = useCreateAnalysis();
+  const { mutate: createAnalysis, isPending } = useCreateAnalysis();
 
   const handleAnalyze = () => {
     if (selectedResumeId && selectedJdId) {
@@ -29,7 +29,7 @@ export function NewAnalysisPage() {
   if (isPending) {
     return (
       <div className="mx-auto max-w-4xl py-8 sm:py-12">
-        <AnalysisLoadingState elapsed={elapsed} />
+        <AnalysisLoadingState />
       </div>
     );
   }
