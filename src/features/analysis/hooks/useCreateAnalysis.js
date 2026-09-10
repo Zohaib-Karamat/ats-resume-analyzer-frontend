@@ -2,12 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { analysisApi } from "../api/analysisApi";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useElapsedTimer } from "../../../hooks/useElapsedTimer";
 
 export function useCreateAnalysis() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: async ({ resumeId, jdId }) => {
       let history = queryClient.getQueryData(["analysis", "history"]);
       if (!history) {
@@ -37,4 +38,9 @@ export function useCreateAnalysis() {
       navigate(`/analysis/${data.id}`);
     },
   });
+
+  // Track elapsed seconds while the mutation is in flight
+  const elapsed = useElapsedTimer(mutation.isPending);
+
+  return { ...mutation, elapsed };
 }
