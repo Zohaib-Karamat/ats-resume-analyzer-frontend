@@ -3,10 +3,10 @@ import { cn } from "../../lib/utils";
 import { Spinner } from "./Spinner";
 
 const variants = {
-  primary: "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-indigo-600",
-  secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 focus-visible:ring-zinc-500 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700",
-  ghost: "bg-transparent text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800",
-  destructive: "bg-rose-500 text-white hover:bg-rose-600 focus-visible:ring-rose-500",
+  primary: "bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow-md hover:shadow-lg hover:from-indigo-400 hover:to-blue-500 focus-visible:ring-indigo-500 border border-transparent",
+  secondary: "bg-white/80 backdrop-blur-sm text-zinc-900 border border-zinc-200/50 shadow-sm hover:bg-zinc-50 focus-visible:ring-zinc-500 dark:bg-zinc-800/80 dark:border-zinc-700/50 dark:text-zinc-50 dark:hover:bg-zinc-700/80",
+  ghost: "bg-transparent text-zinc-700 hover:bg-zinc-100/50 dark:text-zinc-300 dark:hover:bg-zinc-800/50",
+  destructive: "bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-md hover:shadow-lg hover:from-rose-400 hover:to-red-500 focus-visible:ring-rose-500",
 };
 
 const sizes = {
@@ -29,7 +29,7 @@ export const Button = forwardRef(({
       ref={ref}
       disabled={isLoading || disabled}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-offset-zinc-950",
+        "inline-flex items-center justify-center whitespace-nowrap rounded-[var(--radius-md)] text-sm font-medium transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-offset-zinc-950",
         variants[variant],
         sizes[size],
         className

@@ -24,7 +24,7 @@ export function Sidebar({ className }) {
   return (
     <div
       className={cn(
-        "flex h-full w-64 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950",
+        "flex h-full w-64 flex-col overflow-hidden",
         className,
       )}
     >

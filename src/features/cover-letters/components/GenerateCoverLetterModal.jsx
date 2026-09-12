@@ -6,6 +6,7 @@ import { useGenerateCoverLetter } from "../hooks/useCoverLetters";
 import { useResumes } from "../../resumes/hooks/useResumes";
 import { useJobDescriptions } from "../../job-descriptions/hooks/useJobDescriptions";
 import { applyServerFieldErrors } from "../../../lib/errorUtils";
+import { Select } from "../../../components/ui/Select";
 
 export function GenerateCoverLetterModal({ isOpen, onClose }) {
   const navigate = useNavigate();
@@ -13,8 +14,12 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const resumeId = watch("resumeId");
+  const jobDescriptionId = watch("jobDescriptionId");
 
   const { data: resumes, isLoading: isLoadingResumes } = useResumes();
   const { data: jdData, isLoading: isLoadingJds } = useJobDescriptions({ limit: 50 });
@@ -79,19 +84,14 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
             >
               Select Resume
             </label>
-            <select
+            <Select
               id="resumeId"
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
-              {...register("resumeId", { required: "Resume is required" })}
+              options={resumes?.map((resume) => ({ value: resume.id, label: resume.name })) || []}
+              placeholder="-- Choose a resume --"
+              value={resumeId}
               disabled={isLoadingResumes || !resumes?.length}
-            >
-              <option value="">-- Choose a resume --</option>
-              {resumes?.map((resume) => (
-                <option key={resume.id} value={resume.id}>
-                  {resume.name}
-                </option>
-              ))}
-            </select>
+              {...register("resumeId", { required: "Resume is required" })}
+            />
             {errors.resumeId && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                 {errors.resumeId.message}
@@ -111,21 +111,19 @@ export function GenerateCoverLetterModal({ isOpen, onClose }) {
             >
               Select Job Description
             </label>
-            <select
+            <Select
               id="jobDescriptionId"
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+              options={jdData?.data?.map((jd) => ({
+                value: jd.id,
+                label: `${jd.title} ${jd.company ? `at ${jd.company}` : ""}`
+              })) || []}
+              placeholder="-- Choose a job description --"
+              value={jobDescriptionId}
+              disabled={isLoadingJds || !jdData?.data?.length}
               {...register("jobDescriptionId", {
                 required: "Job description is required",
               })}
-              disabled={isLoadingJds || !jdData?.data?.length}
-            >
-              <option value="">-- Choose a job description --</option>
-              {jdData?.data?.map((jd) => (
-                <option key={jd.id} value={jd.id}>
-                  {jd.title} {jd.company ? `at ${jd.company}` : ""}
-                </option>
-              ))}
-            </select>
+            />
             {errors.jobDescriptionId && (
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                 {errors.jobDescriptionId.message}

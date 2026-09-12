@@ -11,7 +11,7 @@ export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex h-screen overflow-hidden mesh-bg">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -23,11 +23,11 @@ export function DashboardLayout() {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:p-4",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <Sidebar className="w-64" />
+        <Sidebar className="w-64 h-full lg:rounded-2xl lg:shadow-2xl lg:h-[calc(100vh-2rem)] glass-panel border-r-0" />
       </div>
 
       {/* Main content wrapper */}

@@ -35,7 +35,7 @@ export function Topbar({ onMenuClick }) {
   };
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 flex-shrink-0 items-center gap-x-3 border-b border-zinc-200 bg-white px-3 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 dark:border-zinc-800 dark:bg-zinc-950">
+    <header className="sticky top-0 lg:top-4 z-10 lg:mx-8 lg:mt-4 lg:mb-2 flex h-16 flex-shrink-0 items-center gap-x-3 lg:rounded-2xl glass-panel px-3 sm:gap-x-6 sm:px-6 lg:px-8 border-b lg:border-b-0 border-zinc-200/50 dark:border-zinc-800/50">
       <IconButton
         variant="ghost"
         className="-m-2.5 p-2.5 text-zinc-700 lg:hidden dark:text-zinc-300"
