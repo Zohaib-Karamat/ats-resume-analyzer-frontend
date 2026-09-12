@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { User, Lock, Mail } from "lucide-react";
+import { User, Mail } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,6 +11,7 @@ import {
   CardDescription,
 } from "../../../components/ui/Card";
 import { Input } from "../../../components/ui/Input";
+import { PasswordInput } from "../../../components/ui/PasswordInput";
 import { Button } from "../../../components/ui/Button";
 import { useAuth } from "../../../hooks/useAuth";
 import {
@@ -204,17 +205,10 @@ export function ProfilePage() {
                 <label className="text-sm font-medium dark:text-zinc-300">
                   Current Password
                 </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-4 w-4 text-zinc-400" />
-                  </div>
-                  <Input
-                    {...passwordForm.register("currentPassword")}
-                    type="password"
-                    className="pl-10"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <PasswordInput
+                  {...passwordForm.register("currentPassword")}
+                  placeholder="••••••••"
+                />
                 {passwordForm.formState.errors.currentPassword && (
                   <p className="text-sm text-rose-500">
                     {passwordForm.formState.errors.currentPassword.message}
@@ -226,17 +220,10 @@ export function ProfilePage() {
                 <label className="text-sm font-medium dark:text-zinc-300">
                   New Password
                 </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-4 w-4 text-zinc-400" />
-                  </div>
-                  <Input
-                    {...passwordForm.register("newPassword")}
-                    type="password"
-                    className="pl-10"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <PasswordInput
+                  {...passwordForm.register("newPassword")}
+                  placeholder="••••••••"
+                />
                 {passwordForm.formState.errors.newPassword && (
                   <p className="text-sm text-rose-500">
                     {passwordForm.formState.errors.newPassword.message}
@@ -248,17 +235,10 @@ export function ProfilePage() {
                 <label className="text-sm font-medium dark:text-zinc-300">
                   Confirm New Password
                 </label>
-                <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-4 w-4 text-zinc-400" />
-                  </div>
-                  <Input
-                    {...passwordForm.register("confirmPassword")}
-                    type="password"
-                    className="pl-10"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <PasswordInput
+                  {...passwordForm.register("confirmPassword")}
+                  placeholder="••••••••"
+                />
                 {passwordForm.formState.errors.confirmPassword && (
                   <p className="text-sm text-rose-500">
                     {passwordForm.formState.errors.confirmPassword.message}

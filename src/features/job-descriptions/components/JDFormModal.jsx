@@ -49,13 +49,18 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
   const contentLength = contentValue.trim().length;
   const isContentValid = contentLength >= 250;
 
+  const normalizeContent = (raw) =>
+    raw.replace(/[ \t]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+
   const onSubmit = (data) => {
+    const content = normalizeContent(data.content);
+
     if (isEditing) {
       const payload = {};
 
       if (data.title !== jdToEdit.title) payload.title = data.title;
       if (data.company !== jdToEdit.company) payload.company = data.company;
-      if (data.content !== jdToEdit.content) payload.content = data.content;
+      if (content !== jdToEdit.content) payload.content = content;
 
       if (!Object.keys(payload).length) {
         onClose();
@@ -67,7 +72,7 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
         { onSuccess: () => onClose() }
       );
     } else {
-      createJD(data, { onSuccess: () => onClose() });
+      createJD({ ...data, content }, { onSuccess: () => onClose() });
     }
   };
 
@@ -100,7 +105,9 @@ export function JDFormModal({ isOpen, onClose, jdToEdit }) {
               Job Description Content
             </label>
             <span className={`text-xs ${contentLength < 250 ? "text-rose-500" : "text-emerald-500"}`}>
-              {contentLength} / 250 characters
+              {contentLength < 250
+                ? `${contentLength} / 250 min chars`
+                : `${contentLength} chars ✓`}
             </span>
           </div>
           <TextArea 

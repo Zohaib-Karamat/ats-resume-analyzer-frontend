@@ -6,6 +6,7 @@ import { useRegister } from "../hooks/useRegister";
 import { applyServerFieldErrors } from "../../../lib/errorUtils";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { PasswordInput } from "../../../components/ui/PasswordInput";
 import {
   Card,
   CardContent,
@@ -84,7 +85,7 @@ export function Register() {
             <label className="text-sm font-medium leading-none dark:text-zinc-300">
               Password
             </label>
-            <Input type="password" {...register("password")} />
+            <PasswordInput {...register("password")} />
             {errors.password && (
               <p className="text-sm text-rose-500">{errors.password.message}</p>
             )}
@@ -93,7 +94,7 @@ export function Register() {
             <label className="text-sm font-medium leading-none dark:text-zinc-300">
               Confirm Password
             </label>
-            <Input type="password" {...register("confirmPassword")} />
+            <PasswordInput {...register("confirmPassword")} />
             {errors.confirmPassword && (
               <p className="text-sm text-rose-500">
                 {errors.confirmPassword.message}

@@ -13,9 +13,5 @@ export const jdSchema = z.object({
     .refine(
       (val) => /[a-zA-Z]/.test(val),
       "Description must contain readable text, not just symbols or numbers.",
-    )
-    .refine(
-      (val) => !/\s{2,}/.test(val),
-      "Please remove duplicate consecutive spaces.",
     ),
 });

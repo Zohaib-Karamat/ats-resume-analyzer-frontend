@@ -6,6 +6,7 @@ import { useResetPassword } from "../hooks/useResetPassword";
 import { applyServerFieldErrors } from "../../../lib/errorUtils";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { PasswordInput } from "../../../components/ui/PasswordInput";
 import {
   Card,
   CardContent,
@@ -90,7 +91,7 @@ export function ResetPassword() {
             <label className="text-sm font-medium leading-none dark:text-zinc-300">
               New password
             </label>
-            <Input type="password" {...register("newPassword")} />
+            <PasswordInput {...register("newPassword")} />
             {errors.newPassword && (
               <p className="text-sm text-rose-500">
                 {errors.newPassword.message}
@@ -101,7 +102,7 @@ export function ResetPassword() {
             <label className="text-sm font-medium leading-none dark:text-zinc-300">
               Confirm new password
             </label>
-            <Input type="password" {...register("confirmNewPassword")} />
+            <PasswordInput {...register("confirmNewPassword")} />
             {errors.confirmNewPassword && (
               <p className="text-sm text-rose-500">
                 {errors.confirmNewPassword.message}

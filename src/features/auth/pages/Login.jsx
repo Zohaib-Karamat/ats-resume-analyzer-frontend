@@ -6,6 +6,7 @@ import { useLogin } from "../hooks/useLogin";
 import { applyServerFieldErrors, parseApiError } from "../../../lib/errorUtils";
 import { Button } from "../../../components/ui/Button";
 import { Input } from "../../../components/ui/Input";
+import { PasswordInput } from "../../../components/ui/PasswordInput";
 import {
   Card,
   CardContent,
@@ -87,7 +88,7 @@ export function Login() {
                 Forgot password?
               </Link>
             </div>
-            <Input type="password" {...register("password")} />
+            <PasswordInput {...register("password")} />
             {errors.password && (
               <p className="text-sm text-rose-500">{errors.password.message}</p>
             )}
